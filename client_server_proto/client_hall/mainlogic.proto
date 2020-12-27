@@ -1,0 +1,276 @@
+syntax = "proto2";
+package client_hall; //
+
+import "base.proto";
+import "parkserver/proto/client_server_proto/common.proto";
+//import "parkserver/proto/share_message/common.proto";
+import "parkserver/proto/share_message/table_struct.proto";
+import "parkserver/proto/share_message/table_struct_player_base.proto";
+
+
+message UpdateGold{
+	optional int64 Gold =1;//
+}
+
+message VersionInfo{
+	optional string Version = 1;//
+}
+
+message OperateBlackReq{
+	optional int32 Type = 1;//1:添加进黑名单  2:移除黑名单
+	optional int64 PlayerId = 2;//玩家id
+}
+
+message GetNearByReq{
+	optional double X = 1;//	自己的坐标
+	optional double Y = 2;// 自己的坐标
+	optional string Area = 3;//
+	optional int32 Type = 4;// 1:附近  2:按地区
+	optional int32 Page = 5;
+}
+
+message GetNearByRes{
+	repeated client_server.OtherPlayerMsg PlayerInfo = 1;
+}
+
+message PageInfo{
+	optional int32 Page = 1;//
+	optional int32 Num = 2;//
+}
+
+message WechatInfo{
+	optional string Code = 1;//
+	optional int32 Type = 2;// 1:绑定 2:解绑
+	optional string PhoneCode = 3;//手机验证码
+}
+
+enum SquareSortType{
+	Issue = 1;	 //发布时间	（包括动态和活动）
+	Activity = 2; //活动时间	（只有活动）
+}
+
+message GetSquareReq{
+	optional int32 SortType =1;// 枚举SquareSortType
+	optional int32 Page = 2;
+	optional int32 SexType = 3; //1:男  2:女 3:不限性别
+	optional string CityType = 4;
+}
+
+message SquareDynamicInfo{
+	optional int64 DynamicId = 1;
+	optional int64 PlayerId = 2;
+	optional string Name = 3;
+	optional string HeadIcon = 4;
+	optional int32 Sex = 5;
+	optional string Content = 6;
+	repeated string Photos = 7;
+	optional int32 Label = 8;//LabelType
+	optional bool IsComment = 9;	//是否禁止评论
+	optional bool IsHide = 10;		//是否对同性隐藏
+	optional int32 Zan = 11; //赞的数量
+	optional bool IsZan = 12;
+	optional int64 CreateTime = 13;
+}
+
+enum ActivityType{
+	ActivityType_Sport = 1;	//户外运动
+	ActivityType_Part = 2;	//社交聚会
+	ActivityType_Foodie = 3;	//我是吃货
+	ActivityType_Movie = 4;	//看电影
+	ActivityType_Game = 5;	//玩游戏
+	ActivityType_Travel = 6;	//旅行休闲
+	ActivityType_Shop = 7;	//陪我购物
+	ActivityType_Chat = 8;	//连麦聊天
+	ActivityType_Other = 9;	//其他
+}
+
+enum ExpectType{
+	ExpectType_Face = 1;		// 看脸
+	ExpectType_Interesting = 2;	//有趣
+	ExpectType_Generous = 3;	//大方
+	ExpectType_CareMe = 4;		//关爱我
+	ExpectType_Feel = 5;		//看感觉
+	ExpectType_DonotCare = 6;	//无所谓
+}
+
+enum ActivityMoment{
+	ActivityMoment_UnKnow = 0; //不限
+	ActivityMoment_BeforeDawn = 1;	//凌晨
+	ActivityMoment_Morning = 2;		//上午
+	ActivityMoment_Noon = 3;		//中午
+	ActivityMoment_Afternoon = 4;	//下午
+}
+
+message SquareActivityInfo{
+	optional int64 ActivityId = 1;
+	optional int64 PlayerId = 2;
+	optional string Name = 3;
+	optional string HeadIcon = 4;
+	optional int32 Sex = 5;
+	repeated string Photos = 6;
+	repeated int32 Label = 7;
+	optional int32 ActivityType = 8;	//枚举 ActivityType
+	repeated int32 ExpectList = 9;		//枚举 ExpectType
+	optional int64 ActivityTime = 10;
+	optional int32 ActivityMoment = 11; //枚举 ActivityMoment
+	optional bool IsComment = 12;	//是否禁止评论
+	optional bool IsHide = 13;		//是否对同性隐藏
+	optional int32 Zan = 14; //赞的数量
+	optional bool IsZan = 15;
+	optional int64 CreateTime = 16;
+}
+
+message SquareInfo{
+	optional int32 Type = 1;//1:动态  2：活动
+	optional bytes SquareMsg = 2;//这里用bytes来传输 客户端根据type来对应解数据结构
+}
+
+message GetSquareRes{
+	repeated SquareInfo SquareList = 1;//如果是发布类型 则动态数据和活动数据都有  如果是活动类型则只有活动数据
+	optional int32 SortType = 3;// 枚举SquareSortType
+	optional int32 SexType = 4; //1:男  2:女 3:不限性别
+	optional string CityType = 5;
+}
+
+message AddSquareZanReq{
+	optional int64 LogId = 1;
+	optional int32 Type = 2;//1:动态  2：活动
+}
+
+message AddSquareCommentReq{
+	optional int64 LogId = 1;
+	optional int32 Type = 2;//1:动态  2：活动
+}
+
+message GetActivityTypeReq{
+	optional int32 ActivityType = 1;	//枚举 ActivityType
+	optional int32 Page = 2;
+	optional int32 SexType = 3; //1:男  2:女
+	optional string CityType = 4;
+}
+
+message GetActivityTypeRes{
+	repeated SquareActivityInfo ActivityList = 1;
+}
+
+message GetPlayerCardReq{
+	optional int64 TargetId = 1;
+}
+
+message GetPlayerCardRes{
+	optional client_server.OtherPlayerMsg PlayerInfo = 1;
+	repeated SquareDynamicInfo DynamicList = 2;
+}
+
+message RechargeVipReq{
+	optional int32 VipType = 1;
+	optional int64 Price = 2;
+}
+
+message RechargeGoldReq{
+	optional int32 RechargeType = 1;
+	optional int64 Price = 2;
+}
+
+message ActivityApplyReq{
+	optional int64  LogId =1;
+}
+
+enum TipOffType{
+	Advertising = 1;//发广告
+	HurlInvectives = 2;//谩骂
+	ShamPhoto = 3;//虚假照片
+	Eroticism = 4;//色情
+	Shamer = 5;//骗子
+	LongNoReply = 6;//长时间不回复
+}
+
+message TipOffReq{
+	optional int32 Type = 1;// 枚举TipOffType
+	optional string Reason = 2;
+	optional string Screenshot =3;//截图
+	optional int64  TargetId = 4;
+}
+
+message GetServiceRes{
+	optional string Phone = 1;
+}
+
+message GetOnlineServiceRes{
+
+}
+
+message ChangePasswordReq{
+	optional string Password = 1; //原密码
+	optional string NewPassword = 2;//新密码
+}
+
+message ReplenishReq{
+	optional string HeadIcon = 1;
+	repeated string Areas = 2;
+	optional int64  Birthday = 3;
+	optional string Work = 4;//职业
+	repeated int32  Programs = 5;//交友节目
+	repeated int32 Expects = 6;//期望对象
+	optional bool  IsHideWechat = 7;
+	optional string Name = 8;
+	optional string Wechat = 9;
+	optional string InviteCode = 10;
+	optional int32  Sex = 11;
+}
+
+message LikePlayerReq{
+	optional int64 TargetId = 1;
+	optional int32 Type =2;//1 ：喜欢 2：取消喜欢
+}
+
+message NotePlayerReq{
+	optional int64 TargetId = 1;
+	optional string Note = 2;
+	optional int32 Type = 3;//1:备注 2：取消备注
+}
+
+// 上行(客户端主动发起)
+service AccountClient2Hall { // 登录注册账号相关
+	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
+	rpc RpcRechargeVip(client_hall.RechargeVipReq)returns(base.Empty);//充值vip
+	rpc RpcRechargeGold(client_hall.RechargeGoldReq)returns(base.Empty);//充值金币
+	rpc RpcAddSquareDynamic(client_hall.SquareDynamicInfo)returns(client_hall.SquareDynamicInfo);//增加社区动态
+	rpc RpcAddSquareActivity(client_hall.SquareActivityInfo)returns(client_hall.SquareActivityInfo);//增加社区活动
+	rpc RpcAddSquareZan(client_hall.AddSquareZanReq)returns(base.Empty);//点赞
+	rpc RpcAddSquareComment(client_hall.AddSquareZanReq)returns(base.Empty);//评论
+	rpc RpcActivityApply(client_hall.ActivityApplyReq)returns(base.Empty);//活动报名
+	rpc RpcGetSquareInfo(client_hall.GetSquareReq)returns(client_hall.GetSquareRes);//获取刷新社区页面
+	rpc RpcGetSquareActivityForType(client_hall.GetActivityTypeReq)returns(client_hall.GetActivityTypeRes);//根据类型获取社区活动信息
+//	rpc RpcClientGetCode(client_server.GetCodeReq)returns(base.Empty);//发送短信验证码
+//	rpc RpcCheckMessageCode(client_server.CheckAccountReq)returns(base.Empty);//检查短信验证码
+	rpc RpcGetBlackList(base.Empty)returns(client_server.PlayerMsgList);//获取黑名单
+	rpc RpcBlackOperate(client_hall.OperateBlackReq)returns(base.Empty);//黑名单操作
+	rpc RpcGetPlayerCardInfo(client_hall.GetPlayerCardReq)returns(client_hall.GetPlayerCardRes);//获取名片信息
+	rpc RpcTipOff(client_hall.TipOffReq)returns(base.Empty);//举报
+	rpc RpcGetServiceInfo(base.Empty)returns(client_hall.GetServiceRes);//获取客服信息
+	rpc RpcGetOnlineService(base.Empty)returns(client_hall.GetOnlineServiceRes);//联系在线客服
+	rpc RpcGetNearByPlayerInfo(client_hall.GetNearByReq)returns(client_hall.GetNearByRes);//附近的人
+	rpc RpcChangePassword(client_hall.ChangePasswordReq)returns(base.Empty);//修改密码
+	rpc RpcReplenishPlayerInfo(client_hall.ReplenishReq)returns(base.Empty);//完善个人信息
+	rpc RpcLikePlayer(client_hall.LikePlayerReq)returns(base.Empty);//喜爱某个人
+	rpc RpcNotePlayer(client_hall.NotePlayerReq)returns(base.Empty);//备注某个人
+	rpc RpcModifyPlayerSetting(share_message.PlayerSetting)returns(base.Empty);//修改个人设置
+	rpc RpcSyncTime(base.Empty)returns(client_server.NTP);//同步服务器时间
+ 	rpc RpcCutBackstage(base.Empty)returns(base.Empty);	//软件切出后台
+ 	rpc RpcReturnApp(base.Empty)returns(base.Empty);	//软件切回app
+	rpc RpcOperateBindWechat(client_hall.WechatInfo)returns(base.Empty);//绑定微信
+	rpc RpcOperateBindPhone(client_hall.WechatInfo)returns(base.Empty);//绑定手机号
+//	rpc RpcGetMyFansAttentionInfo(client_hall.MainInfo)returns(client_hall.AllFansInfo);//请求我的关注或我的粉丝信息
+}
+
+// 下行(服务端主动发起)
+service AccountHall2Client {
+	rpc RpcUpdateGold(client_hall.UpdateGold)returns(base.NoReturn);//更新金币
+	rpc RpcReLogin(base.Empty)returns(base.NoReturn);   	// 顶号通知
+	rpc RpcNoticeNearByInfo(base.Empty)returns(base.NoReturn);//	有附近的人打招呼信息
+	rpc RpcFreezePlayerLogOut(base.Empty)returns(base.NoReturn);//冻结用户返回登录界面
+	rpc RpcSysParameterChange(share_message.SysParameter)returns(base.NoReturn);	//系统参数改变
+	rpc RpcNewMessage(base.Empty)returns(base.NoReturn);	//有新消息显示红点
+	rpc RpcNoNewMessage(base.Empty)returns(base.NoReturn);	//沒有新消息取消红点
+}

@@ -1,0 +1,141 @@
+syntax = "proto2";
+package client_server; //
+import "base.proto";
+import "parkserver/proto/share_message/allcommon.proto";
+import "parkserver/proto/share_message/table_struct.proto";
+import "parkserver/proto/share_message/table_struct_player_base.proto";
+
+
+
+message ToastMsg {
+	required string Text = 1; //
+}
+
+message NTP{
+	required int64 T1 = 1;        //把客户端当前时间戳发到服务器,记为t1（毫秒）
+	optional int64 T2 = 2;        //服务器取得当前时间戳(记为t2),和客户端第1步发上来的时间戳(t1)一起发下去（毫秒）
+}
+
+message AllPersonalChatLog{
+	optional int64 PlayerId = 1;//
+	repeated share_message.ChatMessage PersonalChatLog =2;//
+}
+
+message AllPlayerMsg{
+	optional PlayerMsg Myself = 1;//自己的信息
+	repeated AllPersonalChatLog ChatMsg = 4;//私聊信息
+}
+
+message PlayerMsgList{
+	repeated PlayerMsg PlayerList = 1;//
+}
+
+message ChangePlayerInfo{
+	optional int32 Type = 1;// 1:昵称 2:头像 3:地区 4:生日 5:职业 6:交友节目 7:期望对象 8:微信号 9:身高 10：体重 11:个人介绍 12:个人设置
+	optional int64 Value = 2;//
+	optional string Value1 = 3;//
+	repeated int32 Value2 = 4;
+	optional int32  Value3 = 5;
+	repeated string Value4 = 6;
+	optional share_message.PlayerSetting PlayerSetting = 7;//玩家个人设置
+}
+
+enum LabelAuthType{
+	Real_Auth = 1;//真人认证
+	Goddess_Auth = 2;//女神认证
+}
+
+message PlayerMsg {
+	required int64 PlayerId = 1; // 玩家 id
+	optional int64 Gold = 2;   // 玩家金钱
+	optional string NickName = 3;// 玩家呢称
+	optional string HeadIcon = 4;// 玩家头像
+	optional int32 Sex = 5;// 性别 0:默认 1：男 2:女
+	optional string Account = 6;//手机号
+	repeated string Photo = 7;//照片
+	optional string Signature = 8;// 个性签名
+	optional int64 Birthday = 9;
+	repeated string Area = 10;//市
+	optional string Work = 11;//职业
+	repeated int32  Programs = 12;//交友节目
+	repeated int32 Expects = 13;//期望对象
+	optional string Wechat = 14;//微信账号
+	optional int32  High = 15;
+	optional int32 Weigh = 16;
+	optional int32 AuthType = 17;//是否真人认证
+	repeated OtherPlayerMsg  HeartPlayerList = 18;//心动
+	optional share_message.PlayerSetting PlayerSetting = 19;//玩家个人设置
+	optional share_message.PlayerVip VipInfo = 20;//vip信息
+	optional int32 Label = 21; //LabelType
+}
+
+message OtherPlayerMsg{
+	required int64 PlayerId = 1; // 玩家 id
+	optional string NickName = 2;// 玩家呢称
+	optional string HeadIcon = 3;// 玩家头像
+	optional int32 Sex = 4;// 性别 0:默认 1：男 2:女
+	repeated string Photo = 5;//照片
+	optional string Signature = 6;// 个性签名
+	repeated string Area = 7;//市
+	optional double Distance = 8;//距离
+	optional int32  High = 9;
+	optional int32 Weigh = 10;
+	repeated int32  Programs = 11;//交友节目
+	repeated int32 Expects = 12;//期望对象
+	optional int64 Birthday = 13;
+	optional string Work = 14;//职业
+	optional bool IsLike = 15;
+	optional string Note = 16;//备注
+	optional int32 AuthType = 17; //LabelType
+	optional bool IsPhotoLock = 18;//相册锁
+}
+
+message BroadIdReq {
+	optional int32 BroadId = 4;         //广播id
+}
+
+//验证码请求
+message GetCodeReq {
+	required string Phone = 1;   //
+	optional int32 Type = 2;		// 1:注册发送验证码 2：忘记登录密码短信验证
+}
+
+//验证码返回
+message CheckCodeReq {
+	optional string Code = 1;
+	optional int32 Type = 2; // 1:注册发送验证码 2：忘记登录密码短信验证
+	optional string Phone = 3;
+}
+
+message CheckAccountReq{
+	optional string Account = 1;//
+}
+
+message CheckAccountRes{
+	optional string HeadIcon = 1;//
+	optional bool Vaild = 2;// 是否有效账号
+	optional int32 Sex = 3;//
+	optional bool IsFrezze = 4;//是否冻结
+}
+
+// 上行(客户端主动发起)
+service Client2server{ //
+   /*
+   ntp网络对时(打击外挂会用到),clock offset=t2-(t1+t3)/2
+   1. 把客户端当前时间戳发到服务器,记为t1
+   2. 服务器取得当前时间戳(记为t2),和客户端第1步发上来的时间戳(t1)一起发下去
+   3. 客户端收到包时的时间戳记为t3
+   4. t2-(t1+t3)/2,正值,客户端比服务器比慢了多少,负值,客户端比服务器快了多少
+   */
+	rpc RpcHeartbeat(client_server.NTP)returns(client_server.NTP);       		//心跳时间同步
+}
+
+// 下行(服务端主动发起)
+service Server2Client{
+	rpc RpcToast(client_server.ToastMsg)returns(base.NoReturn); // 透明提示框
+	rpc RpcBroadCastMsg(share_message.BroadCastMsg)returns(base.NoReturn);       //跑马灯广播
+	rpc RpcPlayerAttrChange(client_server.PlayerMsg)returns(base.NoReturn); // 玩家属性变化
+	rpc RpcStopBroad(client_server.BroadIdReq) returns(base.NoReturn); //停止跑马灯广播
+	rpc RpcExit(base.Empty)returns(base.NoReturn);//顶号退出
+}
+

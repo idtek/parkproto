@@ -1,0 +1,77 @@
+syntax = "proto2";
+package client_hall;
+
+import "base.proto";
+import "parkserver/proto/client_server_proto/common.proto";
+
+enum LoginMark{
+	LOGIN_SUCCESS = 1;//登录成功
+	LOGIN_ERROR_ACCOUNT = 2;//账号不存在
+	LOGIN_ERROR_PASSWORD = 3;//密码错误
+	LOGIN_ERROR_MESSAGE = 4;//验证码错误
+	LOGIN_ERROR_FREEZEIP = 5;//冻结ip
+	LOGIN_ERROR_FREEZEACCOUT = 6;//冻结账号
+	LOGIN_ERROR_STOPSERVER = 7;//服务器维护
+	LOGIN_ERROR_WECHATTOKEN = 8;//微信token码错误
+	LOGIN_ERROR_AUTOTOKEN = 9;//自动登录验证码过期
+}
+
+enum RegisterMark{
+	REGISTER_SUCCESS = 1;//注册成功
+	REGISTER_ERROR_PHONE = 2;//手机号错误
+	REGISTER_ERROR_MESSAGE = 3;//验证码错误
+	REGISTER_ERROR_FREEZE = 4;//冻结ip
+	REGISTER_ERROR_ACCOUNT = 5;//账号已存在
+	REGISTER_ERROR_CREATEACCOUNT = 6;//db创建账号异常
+}
+
+
+message LoginReq {
+	required string Account = 1;            // 手机号 或 邮件 或 一串字符
+	optional string Password = 2;           // 密码
+	optional int32 PF = 3;                 //设备类型 1 ios，2 android，3 pc
+	optional string LoginIp = 4;    //登陆ip
+	optional int32 Type = 5;//登录类型  1:密码登录  2.微信登录 3.自动登录
+	optional string WechatCode = 6;//微信code
+	optional string Mark = 7;//硬件码
+	optional string Token =  8;//自动登录的token
+	optional int64 PlayerId = 9;
+}
+
+message LoginRes{
+	optional client_server.PlayerMsg Myself = 1;//自己的信息
+	optional int32 LoginResult = 2;
+	optional string InviteCode = 3;
+//	repeated PlayerMsg Friends = 2;//好友的信息
+//	repeated AllPersonalChatLog ChatMsg = 3;//私聊信息
+//	optional share_message.AllAddPlayerMsg  AllAddPlayerMsg =4;//所有好友申请信息
+
+}
+
+message RegisterReq {
+	required string Account = 1; // 手机号 或 邮件 或 一串字符
+	optional string Password = 2; // 密码
+	optional string MessageCode = 3; // 验证码
+}
+
+message RegisterRes {
+	optional client_server.PlayerMsg Myself = 1;//自己的信息
+	optional int32 RegisterResult = 2;
+}
+
+message ForgetPasswordReq{
+	optional string Account = 1;	//账号登录
+	optional string MessageCode = 2;
+	optional string Password = 3;
+}
+
+
+// 上行(客户端主动发起)
+service Client2Login { // 登录注册账号相关
+	rpc RpcLogin(client_hall.LoginReq)returns(client_hall.LoginRes); //登陆
+	rpc RpcRegister(client_hall.RegisterReq)returns(client_hall.RegisterRes); //注册账号
+	rpc RpcLogOut(base.Empty)returns(base.Empty);//退出登录
+	rpc RpcClientGetCode(client_server.GetCodeReq)returns(base.Empty); //获取验证码
+	rpc RpcCheckAccountVaild(client_server.CheckAccountReq)returns(base.Empty);	//检验验证码
+	rpc	RpcForgetPassword(client_hall.ForgetPasswordReq)returns(base.Empty);//忘记密码
+}

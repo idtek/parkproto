@@ -1,0 +1,103 @@
+// 如果仅用于通讯的 message,别放在这里
+syntax = "proto2";
+package share_message;
+import "ggotag.proto";
+
+
+
+message Account{
+	required int64 PlayerId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
+	optional string Account = 2;//手机号码
+	optional string Password = 3;//手机帐号密码
+	optional string OpenId = 4;//微信openId
+	optional int64 CreateTime = 5;//注册时间
+	optional string AutoToken = 6;//自动登录的token
+	optional int64 AutoLoginTime = 7;//自动登录设置时间
+}
+
+
+message PlayerSetting{
+	required int64 PlayerId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
+	optional bool IsHideMe = 2;
+	optional bool IsHideDistance = 3;
+	optional bool IsHideOnlineTime = 4;
+	optional bool IsHideAccount = 5;
+	optional bool IsCanVoice = 6; //允许连麦
+	optional bool IsReportNotice = 7;
+	optional bool IsNewZanNotice = 8;
+	optional bool IsNewCommentNotice = 9;
+	optional bool IsNewRadioNotice = 10;
+	optional bool IsVoice = 11;//声音
+	optional bool IsShake = 12; //震动
+	optional bool IsHideWechat = 13;//用户资料隐藏微信
+	optional bool IsPhotoPay = 14;//相册是否付费观看
+}
+
+
+//玩家基础表  player
+message Player {
+	required int64 PlayerId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
+	optional string NickName = 2;				//昵称
+	optional string HeadIcon =3;				//头像
+	optional int32 Sex = 4;						//性别 1男 2女
+	repeated string Area = 5;					//地区
+	optional bool IsRobot = 6;					//是否是机器人
+	optional int32 AuthType = 7;//真人认证类型
+	optional string Account = 8;				//手机账号
+	optional string Signature = 9;				//个性签名
+	optional int32 Status = 10;					//用户状态 0 正常 1用户冻结,2后台冻结，3注销中，4已注销
+	optional int64 Birthday = 11;
+	optional double X = 12;						//X坐标
+	optional double Y = 13;						//Y坐标
+	optional string Wechat = 14;//微信账号
+	optional int32  High = 15;
+	optional int32 Weigh = 16;
+	optional string Work = 17;//职业
+	repeated int32  Programs = 18;//交友节目
+	repeated int32 Expects = 19;//期望对象
+	optional string NearbyCity = 20; //最近到过的城市
+	optional string InviteCode = 21;//
+
+
+}
+
+//资产
+message PlayerAsset{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	optional int64 Gold = 2;
+}
+
+//vip信息
+message PlayerVip{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	optional int32 VipType = 2;
+	optional int64 ExpireTime = 3;//过期时间
+}
+
+//心动信息
+message PlayerHeartLove{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	repeated int64 PlayerIds = 2;
+}
+
+message PlayerBlackList{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	repeated int64 BlackList = 2;    //黑名单玩家id列表
+}
+
+message PlayerPhoto{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	repeated string Photos = 2;
+}
+
+message PlayerLike{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	repeated int64 PlayerIds = 2;
+}
+
+message PlayerNote{
+	optional int64 LogId = 1[(gogoproto.jsontag) = "_id,omitempty"];
+	optional int64 PlayerId = 2;
+	optional int64 TargetId = 3;
+	optional string Note = 4;
+}

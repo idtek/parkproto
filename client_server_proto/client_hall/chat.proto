@@ -1,0 +1,55 @@
+syntax = "proto2";
+package client_hall; //
+
+import "base.proto";
+import "parkserver/proto/share_message/allcommon.proto";
+import "parkserver/proto/share_message/table_struct.proto";
+
+message ReadReq{
+	optional int64 LogId = 1;//
+	optional int64 TargetId = 2;//
+}
+
+message WithdrawReq{
+	optional int64 LogId = 1;//
+	optional int64 TargetId = 2;//
+}
+
+message ChatInfo{
+	optional int64 StartId = 1;//
+	optional int64 OverId = 2;//
+	optional int64 TeamId = 3;//
+	optional int32 Count = 4;//
+}
+
+message WaiterMsgRequest{
+	optional int64 Mid=1;		//消息ID
+	optional int32 Type=2;		//查询类型 0全部，1只查新消息
+}
+
+message WaiterMsgResponse{
+	optional int64 WaiterId=1;	//客服ID 如果WaiterId=0客服正忙
+}
+
+
+// 上行(客户端主动发起)
+service ChatClient2Hall { // 登录注册账号相关
+	rpc RpcChat(share_message.Chat)returns(base.Empty); // 发送聊天
+	rpc RpcReadMessage(client_hall.ReadReq)returns(base.Empty);//阅读某条信息
+	rpc	RpcWithdrawMessage(client_hall.WithdrawReq)returns(base.Empty);//撤回消息
+	rpc RpcRequestChatInfo(client_hall.ChatInfo)returns(base.Empty);//请求聊天记录
+
+	rpc RpcGetWaiterMsg(client_hall.WaiterMsgRequest)returns(share_message.IMmessage);					//查询客服消息
+	rpc RpcSendWaiterMsg(share_message.IMmessage)returns(share_message.IMmessage);						//玩家发送客服消息
+	rpc RpcRequestWaiterService(base.Empty)returns(client_hall.WaiterMsgResponse);						//请求人工客服服务
+	rpc RpcWaiterGrade(share_message.IMmessage)returns(base.Empty);										//玩家给客服评分 只传Id，WaiterId，Grade字段
+}
+
+// 下行(服务端主动发起)
+service ChatHall2Client {
+	rpc RpcChatToClient(share_message.Chat)returns(base.NoReturn); // 接收聊天
+	rpc RpcWithdrawMessageResponse(client_hall.WithdrawReq)returns(base.NoReturn);//撤回消息
+	rpc RpcReadMessageResponse(client_hall.ReadReq)returns(base.NoReturn);//阅读消息
+	rpc RpcNewWaiterMsg(share_message.IMmessage)returns(base.NoReturn); 	//新消息推送
+	rpc RpcEndWaiterMsg(share_message.IMmessage)returns(base.NoReturn);		//结束IM对话消息
+}
