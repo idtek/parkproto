@@ -22,13 +22,26 @@ message BroadCastMsg{
     optional string Site = 2 ;//广播的站点
 }
 
+
+
+
+enum ChatType{
+    SYSTEM = 0; //系统提示
+    TEXT = 1; //文本
+    VOICE = 2; //语音
+    PHOTO = 3; //图片
+    WITHDRAW = 4; //撤回
+    VOICECALL = 5;//语音通话
+    EMOJI = 6;//表情
+}
+
 message Chat {
     optional int64 SourceId = 1;            //说话人id
     optional int64 TargetId = 2;            //目标人id或群id
     optional string Content = 3;            //说话内容
     optional int64 Time = 4;                //发送的时间戳
     optional int64 LogId = 5;               //日志id
-    optional int32 ContentType = 6;         //发送内容类型:0系统提示，1文字，2语音，3图片，4撤回消息 5语音通话 6视屏通话 7表情
+    optional int32 ContentType = 6;         //发送内容类型  ChatType
     optional int32 IsSuccessSend = 7;//  不是好友情况下 能否成功发送信息  1:黑名单发送失败 2：敏感词屏蔽
     optional string SourceName = 8;//
     optional string SourceHeadIcon = 9;//
@@ -78,39 +91,17 @@ message ActivityData{
     optional int32 Sex = 13;
 }
 
-message CommentList{
-    repeated CommentData CommentInfo = 14;//评论信息
-}
-
 //评论记录
 message CommentData{
     optional int64 Id = 1[(gogoproto.jsontag) = "_id,omitempty"];//
     optional int64 LogId = 2;//广场动态id
     optional int64 PlayerId = 3;// 谁评论的
     optional string Content = 4;//评论内容
-    optional int64 BelongId = 5;// 属于哪个评论底下的子评论  如果等于0 代表是主评论
-    optional int64 CreateTime = 6;
-    optional int64 TargetId = 7;// 被评论的人物id
-    optional int32 Sex = 8 ;//
-    optional string Name = 9 ;//
-    optional string OtherName = 10 [(gogoproto.jsontag) = "-"];//被评论的名字
-    optional int32 OtherSex = 11 [(gogoproto.jsontag) = "-"];//被评论的性别
-    optional int64 TotalNum = 12 [(gogoproto.jsontag) = "-"];// 总共有多少条子评论
-    optional int64 OwnerId = 13;//这条评论是属于谁发布的动态
-    optional string HeadIcon = 14;//
+    optional int64 CreateTime =5;
+    optional int64 OwnerId = 6;//这条评论是属于谁发布的动态
     optional int32 Statue = 15;// 0：正常 1:删除
 }
-//点赞记录
-message ZanData{
-    optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//
-    optional int64 PlayerId = 2;//
-    optional int64 OperateId = 3;//操作人id
-    optional int64 DynamicId = 4;//动态id
-    optional int64 CreateTime = 5;//
-    optional int32 Sex = 6 [(gogoproto.jsontag) = "-"];//
-    optional string Name = 7 [(gogoproto.jsontag) = "-"];//
-    optional string HeadIcon = 8 [(gogoproto.jsontag) = "-"];//
-}
+
 //关注记录
 message AttentionData{
     optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//

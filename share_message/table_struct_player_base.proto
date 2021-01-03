@@ -31,6 +31,7 @@ message PlayerSetting{
 	optional bool IsShake = 12; //震动
 	optional bool IsHideWechat = 13;//用户资料隐藏微信
 	optional bool IsPhotoPay = 14;//相册是否付费观看
+	optional int64 PhotoPrice = 15;//相册付费价格
 }
 
 

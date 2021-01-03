@@ -3,7 +3,7 @@ package client_hall; //
 
 import "base.proto";
 import "parkserver/proto/client_server_proto/common.proto";
-//import "parkserver/proto/share_message/common.proto";
+import "parkserver/proto/share_message/allcommon.proto";
 import "parkserver/proto/share_message/table_struct.proto";
 import "parkserver/proto/share_message/table_struct_player_base.proto";
 
@@ -44,6 +44,11 @@ message WechatInfo{
 	optional string PhoneCode = 3;//手机验证码
 }
 
+enum SquareType{
+	Type_Dynamic = 1; //动态
+	Type_Activity = 2;//活动
+}
+
 enum SquareSortType{
 	Issue = 1;	 //发布时间	（包括动态和活动）
 	Activity = 2; //活动时间	（只有活动）
@@ -70,6 +75,8 @@ message SquareDynamicInfo{
 	optional int32 Zan = 11; //赞的数量
 	optional bool IsZan = 12;
 	optional int64 CreateTime = 13;
+	repeated CommentData CommentInfo = 14;//评论信息
+	optional bool IsMoreComment = 15;//是否还有别的评论
 }
 
 enum ActivityType{
@@ -118,10 +125,12 @@ message SquareActivityInfo{
 	optional int32 Zan = 14; //赞的数量
 	optional bool IsZan = 15;
 	optional int64 CreateTime = 16;
+	repeated CommentData CommentInfo = 17;//评论信息
+	optional bool IsMoreComment = 18;//是否还有别的评论
 }
 
 message SquareInfo{
-	optional int32 Type = 1;//1:动态  2：活动
+	optional int32 Type = 1;//SquareType
 	optional bytes SquareMsg = 2;//这里用bytes来传输 客户端根据type来对应解数据结构
 }
 
@@ -134,12 +143,7 @@ message GetSquareRes{
 
 message AddSquareZanReq{
 	optional int64 LogId = 1;
-	optional int32 Type = 2;//1:动态  2：活动
-}
-
-message AddSquareCommentReq{
-	optional int64 LogId = 1;
-	optional int32 Type = 2;//1:动态  2：活动
+	optional int32 Type = 2;//SquareType
 }
 
 message GetActivityTypeReq{
@@ -151,6 +155,38 @@ message GetActivityTypeReq{
 
 message GetActivityTypeRes{
 	repeated SquareActivityInfo ActivityList = 1;
+}
+
+message CommentReq{
+	optional int32 Page = 1; //从2开始发
+	optional int64 LogId = 2;
+}
+
+message CommentListRes{
+	repeated CommentData CommentInfo = 1;//评论信息
+	optional bool IsMore = 2;
+}
+
+//评论记录
+message CommentData{
+	optional int64 LogId = 1;//广场动态id
+	optional int64 PlayerId = 2;// 谁评论的
+	optional string Content = 3;//评论内容
+	optional int64 CreateTime = 4;
+	optional int32 Sex = 8 ;//
+	optional string Name = 9 ;//
+	optional int64 OwnerId = 13;//谁发布的动态
+	optional string HeadIcon = 14;//
+	optional int32 Statue = 15;// 0：正常 1:删除
+}
+
+message DelSquareReq{
+	optional int64  LogId  = 1;
+}
+
+message GetSquareOneReq{
+	optional int64 LogId = 1;
+	optional int32 Type = 2;//SquareType
 }
 
 message GetPlayerCardReq{
@@ -230,6 +266,39 @@ message NotePlayerReq{
 	optional int32 Type = 3;//1:备注 2：取消备注
 }
 
+enum MessageType{
+	System = 1;//系统通知
+	Zan = 2;//点赞通知
+	Comment = 3;//评论通知
+	Report = 4;//报名通知
+	Wallet = 5;//钱包通知
+	Evaluate = 6;//评价通知
+	Square = 7;//电台
+}
+
+message MessageInfo{
+	optional int64 LogId = 1;
+	optional int32 Type = 2;//MessageType
+	optional string Name = 3;
+	optional string HeadIcon = 4;
+	optional string Content = 5;
+	optional int64 CreateTime = 6;
+}
+
+message UnReadMessage{
+	repeated share_message.Chat Chats = 1;
+	repeated MessageInfo Messages = 2;
+}
+
+message PhotoLockReq{
+	optional int64 TargetId = 1;
+	optional int32 Type = 2;//1 会员 2付费
+}
+
+message PhotoLockRes{
+	repeated string Photos = 1;
+}
+
 // 上行(客户端主动发起)
 service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
@@ -237,16 +306,20 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcRechargeGold(client_hall.RechargeGoldReq)returns(base.Empty);//充值金币
 	rpc RpcAddSquareDynamic(client_hall.SquareDynamicInfo)returns(client_hall.SquareDynamicInfo);//增加社区动态
 	rpc RpcAddSquareActivity(client_hall.SquareActivityInfo)returns(client_hall.SquareActivityInfo);//增加社区活动
+	rpc RpcDelSquareInfo(client_hall.DelSquareReq)returns(base.Empty);//删除动态或者活动
 	rpc RpcAddSquareZan(client_hall.AddSquareZanReq)returns(base.Empty);//点赞
-	rpc RpcAddSquareComment(client_hall.AddSquareZanReq)returns(base.Empty);//评论
+	rpc RpcAddSquareComment(client_hall.CommentData)returns(client_hall.CommentData);//评论
+	rpc RpcGetSquarePageComment(client_hall.CommentReq)returns(client_hall.CommentListRes);//获得更多评论
 	rpc RpcActivityApply(client_hall.ActivityApplyReq)returns(base.Empty);//活动报名
 	rpc RpcGetSquareInfo(client_hall.GetSquareReq)returns(client_hall.GetSquareRes);//获取刷新社区页面
+	rpc RpcGetSquareOneInfo(client_hall.GetSquareOneReq)returns(client_hall.SquareInfo);//获取某一条动态或者活动
 	rpc RpcGetSquareActivityForType(client_hall.GetActivityTypeReq)returns(client_hall.GetActivityTypeRes);//根据类型获取社区活动信息
-//	rpc RpcClientGetCode(client_server.GetCodeReq)returns(base.Empty);//发送短信验证码
+	//	rpc RpcClientGetCode(client_server.GetCodeReq)returns(base.Empty);//发送短信验证码
 //	rpc RpcCheckMessageCode(client_server.CheckAccountReq)returns(base.Empty);//检查短信验证码
 	rpc RpcGetBlackList(base.Empty)returns(client_server.PlayerMsgList);//获取黑名单
 	rpc RpcBlackOperate(client_hall.OperateBlackReq)returns(base.Empty);//黑名单操作
 	rpc RpcGetPlayerCardInfo(client_hall.GetPlayerCardReq)returns(client_hall.GetPlayerCardRes);//获取名片信息
+	rpc RpcGetPlayerPhotoLock(client_hall.PhotoLockReq)returns(client_hall.PhotoLockRes);//获取上锁照片信息
 	rpc RpcTipOff(client_hall.TipOffReq)returns(base.Empty);//举报
 	rpc RpcGetServiceInfo(base.Empty)returns(client_hall.GetServiceRes);//获取客服信息
 	rpc RpcGetOnlineService(base.Empty)returns(client_hall.GetOnlineServiceRes);//联系在线客服
@@ -273,4 +346,6 @@ service AccountHall2Client {
 	rpc RpcSysParameterChange(share_message.SysParameter)returns(base.NoReturn);	//系统参数改变
 	rpc RpcNewMessage(base.Empty)returns(base.NoReturn);	//有新消息显示红点
 	rpc RpcNoNewMessage(base.Empty)returns(base.NoReturn);	//沒有新消息取消红点
+	rpc RpcNoticeMessage(client_hall.MessageInfo)returns(base.Empty);//通知有新消息
+	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.Empty);//登录发送未读聊天信息
 }

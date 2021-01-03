@@ -35,11 +35,9 @@ message ChatMessage {
 	optional int64 TargetId = 3;            //目标人id或群id
 	optional string Content = 4;            //说话内容
 	optional int64 Time = 5;                //发送的时间戳
-	optional int32 ContentType = 6;         //发送内容类型:0系统提示，1文字，2语音，3图片，4撤回消息 5语音通话 6视屏通话 7表情
+	optional int32 ContentType = 6;         ////发送内容类型  ChatType
 	optional bool IsRead = 7;//				//目标人是否已读
 }
-
-
 
 //用户金币报表 user_gold_report
 message UserGoldReport {
@@ -445,20 +443,6 @@ message ArticleReport{
 	optional int64 Clicks=8;			//点击次数
 	optional int64 Jumps=9;				//跳转次数
 	// repeated Article Article=10;
-}
-
-//==================附近的人======================
-
-message LocationData{
-	optional int64 PlayerId = 1;
-	optional double X = 2;
-	optional double Y = 3;
-	optional string Province = 4;  //省
-	optional string City = 5;	//市
-}
-
-message AllLocationDate{
-	repeated LocationData LocationData = 1;
 }
 
 //=================================================支付设定

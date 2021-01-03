@@ -88,6 +88,7 @@ message OtherPlayerMsg{
 	optional string Note = 16;//备注
 	optional int32 AuthType = 17; //LabelType
 	optional bool IsPhotoLock = 18;//相册锁
+	optional int64 PhotoPrice = 19;//相册查看价格
 }
 
 message BroadIdReq {
