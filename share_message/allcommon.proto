@@ -5,21 +5,16 @@ import "ggotag.proto";
 
 message BroadCastData{
     required int32 Level = 1;           //广播等级:
-    required string Content = 2;        //消息内容
-    required int32 Count = 3;           //广播次数
-    optional int32 BroadId = 4;         //广播id
-    optional int32 MsgType=5;  //消息类型 0:全部 100：游戏 101：非游戏 1：百人牛牛 2：炸金花2D 3：龙虎斗 4：红黑大战 5：捕鱼 6：抢红包 7：拉霸 8：斗地主 9：炸金花3D
-    optional int64 Amount =6;          //金额
-    optional  string NickName =7;          //昵称
-}
-
-message BroadIdReq {
-    required int32 BroadId = 4;         //广播id
+    required int32 Count = 2;           //广播次数
+    optional int32 MsgType = 3;           //1:充值  2:发布动态  3:发布活动 4:vip
+    optional int64 Amount = 4;          //金额
+    optional string NickName = 5;          //昵称
+    optional int32 ActivityType = 6;  //活动类型
+    optional int32 VipType = 7;//vip类型  1:月会员 2:季会员 3:年会员
 }
 
 message BroadCastMsg{
     repeated BroadCastData Data = 1;
-    optional string Site = 2 ;//广播的站点
 }
 
 
