@@ -127,6 +127,7 @@ message SquareActivityInfo{
 	optional int64 CreateTime = 16;
 	repeated CommentData CommentInfo = 17;//评论信息
 	optional bool IsMoreComment = 18;//是否还有别的评论
+	optional int32 ReportNum = 19;
 }
 
 message SquareInfo{
@@ -173,11 +174,12 @@ message CommentData{
 	optional int64 PlayerId = 2;// 谁评论的
 	optional string Content = 3;//评论内容
 	optional int64 CreateTime = 4;
-	optional int32 Sex = 8 ;//
-	optional string Name = 9 ;//
-	optional int64 OwnerId = 13;//谁发布的动态
-	optional string HeadIcon = 14;//
-	optional int32 Statue = 15;// 0：正常 1:删除
+	optional int32 Sex = 5;//
+	optional string Name = 6;//
+	optional int64 OwnerId = 7;//谁发布的动态
+	optional string HeadIcon = 8;//
+	optional int32 Statue = 9;// 0：正常 1:删除
+	optional int32 Type = 10;//SquareType
 }
 
 message DelSquareReq{
@@ -287,8 +289,13 @@ message MessageInfo{
 
 message UnReadMessage{
 	repeated share_message.Chat Chats = 1;
-	repeated MessageInfo Messages = 2;
+	optional int32 UnReadNum = 2;
 }
+
+message MessageList{
+	repeated MessageInfo Messages = 1;
+}
+
 
 message PhotoLockReq{
 	optional int64 TargetId = 1;
@@ -340,12 +347,9 @@ service AccountClient2Hall { // 登录注册账号相关
 // 下行(服务端主动发起)
 service AccountHall2Client {
 	rpc RpcUpdateGold(client_hall.UpdateGold)returns(base.NoReturn);//更新金币
-	rpc RpcReLogin(base.Empty)returns(base.NoReturn);   	// 顶号通知
-	rpc RpcNoticeNearByInfo(base.Empty)returns(base.NoReturn);//	有附近的人打招呼信息
 	rpc RpcFreezePlayerLogOut(base.Empty)returns(base.NoReturn);//冻结用户返回登录界面
 	rpc RpcSysParameterChange(share_message.SysParameter)returns(base.NoReturn);	//系统参数改变
 	rpc RpcNewMessage(base.Empty)returns(base.NoReturn);	//有新消息显示红点
-	rpc RpcNoNewMessage(base.Empty)returns(base.NoReturn);	//沒有新消息取消红点
 	rpc RpcNoticeMessage(client_hall.MessageInfo)returns(base.Empty);//通知有新消息
 	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.Empty);//登录发送未读聊天信息
 }

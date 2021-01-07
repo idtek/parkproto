@@ -39,6 +39,74 @@ message ChatMessage {
 	optional bool IsRead = 7;//				//目标人是否已读
 }
 
+//社区动态
+message DynamicData{
+	optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//
+	optional int64 PlayerId = 2;
+	optional string Content = 3;//
+	repeated string Photo = 4;//
+	optional int64 CreateTime = 5;//
+	optional int32 Statue = 6;// 0：正常 1:删除
+	optional bool IsComment = 7;	//是否禁止评论
+	optional bool IsHide = 8;		//是否对同性隐藏
+	optional int32 Sex = 9;
+}
+
+//社区活动
+message ActivityData{
+	optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//
+	optional int64 PlayerId = 2;
+	repeated string Photo = 3;//
+	optional int64 CreateTime = 4;//
+	optional int32 Statue = 5;// 0：正常 1:删除
+	optional bool IsComment = 6;	//是否禁止评论
+	optional bool IsHide = 7;		//是否对同性隐藏
+	optional int32 ActivityType = 8;	//枚举 ActivityType
+	repeated int32 ExpectList = 9;		//枚举 ExpectType
+	optional int64 ActivityTime = 10;
+	optional int32 ActivityMoment = 11; //枚举 ActivityMoment
+	optional int32 Sex = 12;
+}
+
+//评论记录
+message CommentData{
+	optional int64 Id = 1[(gogoproto.jsontag) = "_id,omitempty"];//
+	optional int64 LogId = 2;//广场动态id
+	optional int64 PlayerId = 3;// 谁评论的
+	optional string Content = 4;//评论内容
+	optional int64 CreateTime =5;
+	optional int64 OwnerId = 6;//这条评论是属于谁发布的动态
+	optional int32 Statue = 7;// 0：正常 1:删除
+	optional bool IsRead = 8;
+}
+
+message ActivityReport{
+	optional int64 Id = 1[(gogoproto.jsontag) = "_id,omitempty"];//
+	optional int64 LogId = 2;//广场动态id
+	optional int64 PlayerId = 3;// 谁报名
+	optional int64 CreateTime = 4;
+	optional bool IsRead = 5;
+}
+
+message SquareZan{
+	optional int64 Id = 1[(gogoproto.jsontag) = "_id,omitempty"];//
+	optional int64 LogId = 2;//广场动态id
+	optional int64 PlayerId = 3;// 谁点赞
+	optional int64 CreateTime = 4;
+	optional bool IsRead = 5;
+	optional int32 Type = 6;// 1 动态 2 活动
+}
+
+message MessageUnRead{
+	optional int64 Id = 1[(gogoproto.jsontag) = "_id,omitempty"];//
+	optional int32 Type = 2;// mainlogic.proto MessageType
+	optional int64 TargetId = 3;
+	optional int64 LogId = 4;
+	optional int64 PlayerId = 5;
+}
+
+
+
 //用户金币报表 user_gold_report
 message UserGoldReport {
 	required int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];

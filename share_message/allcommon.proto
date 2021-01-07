@@ -1,8 +1,6 @@
 syntax = "proto2";
 package share_message; //
 
-import "ggotag.proto";
-
 message BroadCastData{
     required int32 Level = 1;           //广播等级:
     required int32 Count = 2;           //广播次数
@@ -16,9 +14,6 @@ message BroadCastData{
 message BroadCastMsg{
     repeated BroadCastData Data = 1;
 }
-
-
-
 
 enum ChatType{
     SYSTEM = 0; //系统提示
@@ -44,66 +39,5 @@ message Chat {
     optional int32 EvilType=11; //聊天:0,100:正常 20001：政治 20002：色情 20006：涉毒违法 20007：谩骂 20103 性感 20105：广告引流 24001：暴恐
     optional string DirtyWord = 12; //屏蔽词
 }
-message MsgData{
-    optional int32 ServerType = 1;          //服务器类型:1大厅，2后台，3商场
-    optional string RpcName = 2;            //Rpc名称
-    optional int64 MsgId = 3;               //消息名称
-    optional string MsgName = 4;            //消息体结构名
-    optional bytes Msg = 5;                 //序列化后的消息
-    repeated int64 Playerids= 6;            //指定玩家推送
-    optional bool IsAll = 7;                //是否所有大厅
-}
 
 
-//社区动态
-message DynamicData{
-    optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//
-    optional int64 PlayerId = 2;
-    optional string Content = 3;//
-    repeated string Photo = 4;//
-    optional int64 CreateTime = 5;//
-    optional int32 Statue = 6;// 0：正常 1:删除
-    optional bool IsComment = 7;	//是否禁止评论
-    optional bool IsHide = 8;		//是否对同性隐藏
-    optional int32 Zan = 9;
-    optional int32 Sex = 10;
-}
-
-//社区活动
-message ActivityData{
-    optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//
-    optional int64 PlayerId = 2;
-    repeated string Photo = 3;//
-    optional int64 CreateTime = 4;//
-    optional int32 Statue = 5;// 0：正常 1:删除
-    optional bool IsComment = 6;	//是否禁止评论
-    optional bool IsHide = 7;		//是否对同性隐藏
-    optional int32 ActivityType = 8;	//枚举 ActivityType
-    repeated int32 ExpectList = 9;		//枚举 ExpectType
-    optional int64 ActivityTime = 10;
-    optional int32 ActivityMoment = 11; //枚举 ActivityMoment
-    optional int32 Zan = 12;
-    optional int32 Sex = 13;
-}
-
-//评论记录
-message CommentData{
-    optional int64 Id = 1[(gogoproto.jsontag) = "_id,omitempty"];//
-    optional int64 LogId = 2;//广场动态id
-    optional int64 PlayerId = 3;// 谁评论的
-    optional string Content = 4;//评论内容
-    optional int64 CreateTime =5;
-    optional int64 OwnerId = 6;//这条评论是属于谁发布的动态
-    optional int32 Statue = 15;// 0：正常 1:删除
-}
-
-//关注记录
-message AttentionData{
-    optional int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];//
-    optional int64 PlayerId = 2;//
-    optional int64 OperateId = 3;//操作人id
-    optional int64 CreateTime = 4;//
-    optional int32 Sex = 5 [(gogoproto.jsontag) = "-"];//
-    optional string Name = 6 [(gogoproto.jsontag) = "-"];//
-    optional string HeadIcon = 7 [(gogoproto.jsontag) = "-"];//
-}

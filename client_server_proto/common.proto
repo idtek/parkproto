@@ -62,11 +62,10 @@ message PlayerMsg {
 	optional string Wechat = 14;//微信账号
 	optional int32  High = 15;
 	optional int32 Weigh = 16;
-	optional int32 AuthType = 17;//是否真人认证
+	optional int32 AuthType = 17;//LabelAuthType
 	repeated OtherPlayerMsg  HeartPlayerList = 18;//心动
 	optional share_message.PlayerSetting PlayerSetting = 19;//玩家个人设置
 	optional share_message.PlayerVip VipInfo = 20;//vip信息
-	optional int32 Label = 21; //LabelType
 }
 
 message OtherPlayerMsg{
@@ -89,6 +88,7 @@ message OtherPlayerMsg{
 	optional int32 AuthType = 17; //LabelType
 	optional bool IsPhotoLock = 18;//相册锁
 	optional int64 PhotoPrice = 19;//相册查看价格
+	optional share_message.PlayerVip VipInfo = 20;//vip信息
 }
 
 message BroadIdReq {
