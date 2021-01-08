@@ -77,6 +77,7 @@ message SquareDynamicInfo{
 	optional int64 CreateTime = 13;
 	repeated CommentData CommentInfo = 14;//评论信息
 	optional bool IsMoreComment = 15;//是否还有别的评论
+	optional bool IsVip = 20;//是否vip
 }
 
 enum ActivityType{
@@ -351,5 +352,5 @@ service AccountHall2Client {
 	rpc RpcSysParameterChange(share_message.SysParameter)returns(base.NoReturn);	//系统参数改变
 	rpc RpcNewMessage(base.Empty)returns(base.NoReturn);	//有新消息显示红点
 	rpc RpcNoticeMessage(client_hall.MessageInfo)returns(base.Empty);//通知有新消息
-	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.Empty);//登录发送未读聊天信息
+	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.NoReturn);//登录发送未读聊天信息
 }

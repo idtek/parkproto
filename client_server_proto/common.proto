@@ -88,7 +88,7 @@ message OtherPlayerMsg{
 	optional int32 AuthType = 17; //LabelType
 	optional bool IsPhotoLock = 18;//相册锁
 	optional int64 PhotoPrice = 19;//相册查看价格
-	optional share_message.PlayerVip VipInfo = 20;//vip信息
+	optional bool IsVip = 20;//vip信息
 }
 
 message BroadIdReq {
