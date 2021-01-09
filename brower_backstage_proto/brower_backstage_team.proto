@@ -1,0 +1,23 @@
+package brower_backstage; 
+import "base.proto";
+import "common.proto";
+import "parkserver/proto/share_message/table_struct.proto";
+//这里是群主后台的rpc
+//common.proto中有常用的rpc请求和返回的数据结构
+
+
+
+// 浏览器主动发起
+service Brower2TeamBackstage {
+	// 登录后台相关操作
+	rpc RpcTeamLogin(brower_backstage.LoginRequest)returns(share_message.Manager); 					//群主登录
+	rpc RpcTeamLogout(base.Empty)returns(base.Empty); 												//群主登出
+}
+
+// 群主后台主动发起
+service TeamBackstage2Brower {
+	rpc RpcTeamTestPush(brower_backstage.PushRequest)returns(brower_backstage.PushResponse); 	//测试rpc
+
+	rpc RpcTeamNewPush(base.Empty)returns(base.NoReturn);										//你有新数据推送 通用刷新通知 后台的主要更新推送 勿动
+	rpc RpcTeamReplacePush(brower_backstage.ErrMessage)returns(base.NoReturn);					//顶号通知
+} 
