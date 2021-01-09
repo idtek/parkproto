@@ -77,6 +77,7 @@ message SquareDynamicInfo{
 	optional int64 CreateTime = 13;
 	repeated CommentData CommentInfo = 14;//评论信息
 	optional bool IsMoreComment = 15;//是否还有别的评论
+	optional bool IsVip = 20;//是否vip
 }
 
 enum ActivityType{
@@ -180,6 +181,7 @@ message CommentData{
 	optional string HeadIcon = 8;//
 	optional int32 Statue = 9;// 0：正常 1:删除
 	optional int32 Type = 10;//SquareType
+	optional int64  Id = 11;//评论id
 }
 
 message DelSquareReq{
@@ -268,34 +270,10 @@ message NotePlayerReq{
 	optional int32 Type = 3;//1:备注 2：取消备注
 }
 
-enum MessageType{
-	System = 1;//系统通知
-	Zan = 2;//点赞通知
-	Comment = 3;//评论通知
-	Report = 4;//报名通知
-	Wallet = 5;//钱包通知
-	Evaluate = 6;//评价通知
-	Square = 7;//电台
-}
-
-message MessageInfo{
-	optional int64 LogId = 1;
-	optional int32 Type = 2;//MessageType
-	optional string Name = 3;
-	optional string HeadIcon = 4;
-	optional string Content = 5;
-	optional int64 CreateTime = 6;
-}
-
 message UnReadMessage{
 	repeated share_message.Chat Chats = 1;
 	optional int32 UnReadNum = 2;
 }
-
-message MessageList{
-	repeated MessageInfo Messages = 1;
-}
-
 
 message PhotoLockReq{
 	optional int64 TargetId = 1;
@@ -304,6 +282,25 @@ message PhotoLockReq{
 
 message PhotoLockRes{
 	repeated string Photos = 1;
+}
+
+message SearchPlayerReq{
+	optional string Key = 1;
+	optional int32 Page = 2;
+}
+
+message SearchPlayerRes{
+	repeated SearchPlayerInfo PlayerList = 1;
+	optional bool More = 2;
+}
+
+message SearchPlayerInfo{
+	optional int64 PlayerId = 1;
+	optional string Name = 2;
+	optional int32 Label = 3;
+	optional int64 BirthDay = 4;
+	optional string Area = 5;
+	optional string Work = 6;
 }
 
 // 上行(客户端主动发起)
@@ -341,7 +338,7 @@ service AccountClient2Hall { // 登录注册账号相关
  	rpc RpcReturnApp(base.Empty)returns(base.Empty);	//软件切回app
 	rpc RpcOperateBindWechat(client_hall.WechatInfo)returns(base.Empty);//绑定微信
 	rpc RpcOperateBindPhone(client_hall.WechatInfo)returns(base.Empty);//绑定手机号
-//	rpc RpcGetMyFansAttentionInfo(client_hall.MainInfo)returns(client_hall.AllFansInfo);//请求我的关注或我的粉丝信息
+	rpc RpcSearchPlayer(client_hall.SearchPlayerReq)returns(client_hall.SearchPlayerRes);//搜索
 }
 
 // 下行(服务端主动发起)
@@ -350,6 +347,6 @@ service AccountHall2Client {
 	rpc RpcFreezePlayerLogOut(base.Empty)returns(base.NoReturn);//冻结用户返回登录界面
 	rpc RpcSysParameterChange(share_message.SysParameter)returns(base.NoReturn);	//系统参数改变
 	rpc RpcNewMessage(base.Empty)returns(base.NoReturn);	//有新消息显示红点
-	rpc RpcNoticeMessage(client_hall.MessageInfo)returns(base.Empty);//通知有新消息
-	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.Empty);//登录发送未读聊天信息
+
+	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.NoReturn);//登录发送未读聊天信息
 }

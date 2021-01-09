@@ -31,13 +31,18 @@ message PlayerMsgList{
 }
 
 message ChangePlayerInfo{
-	optional int32 Type = 1;// 1:昵称 2:头像 3:地区 4:生日 5:职业 6:交友节目 7:期望对象 8:微信号 9:身高 10：体重 11:个人介绍 12:个人设置
-	optional int64 Value = 2;//
-	optional string Value1 = 3;//
-	repeated int32 Value2 = 4;
-	optional int32  Value3 = 5;
-	repeated string Value4 = 6;
-	optional share_message.PlayerSetting PlayerSetting = 7;//玩家个人设置
+	optional string Name = 1;// 1:昵称 2:头像 3:地区 4:生日 5:职业 6:交友节目 7:期望对象 8:微信号 9:身高 10：体重 11:个人介绍 12:个人设置
+	optional string HeadIcon = 2;//
+	repeated string Area = 3;//
+	optional int64 Birthday = 4;
+	optional string  Work = 5;
+	repeated int32  Programs = 6;
+	repeated int32 Expects = 7;//期望对象
+	optional string Wechat = 8;
+	optional int32  High = 9;
+	optional int32 Weigh = 10;
+	optional string Signature = 11;// 个性签名
+	optional bool IsHide = 12;//隐藏微信
 }
 
 enum LabelAuthType{
@@ -88,7 +93,7 @@ message OtherPlayerMsg{
 	optional int32 AuthType = 17; //LabelType
 	optional bool IsPhotoLock = 18;//相册锁
 	optional int64 PhotoPrice = 19;//相册查看价格
-	optional share_message.PlayerVip VipInfo = 20;//vip信息
+	optional bool IsVip = 20;//vip信息
 }
 
 message BroadIdReq {
