@@ -58,6 +58,7 @@ message Player {
 	repeated int32 Expects = 19;//期望对象
 	optional string NearbyCity = 20; //最近到过的城市
 	optional string InviteCode = 21;//
+	optional bool IsMerchant = 22;//是否是商家
 
 
 }

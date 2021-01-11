@@ -78,6 +78,7 @@ message SquareDynamicInfo{
 	repeated CommentData CommentInfo = 14;//评论信息
 	optional bool IsMoreComment = 15;//是否还有别的评论
 	optional bool IsVip = 20;//是否vip
+	optional bool IsMerchant = 21;
 }
 
 enum ActivityType{
@@ -116,7 +117,7 @@ message SquareActivityInfo{
 	optional string HeadIcon = 4;
 	optional int32 Sex = 5;
 	repeated string Photos = 6;
-	repeated int32 Label = 7;
+	optional int32 Label = 7;
 	optional int32 ActivityType = 8;	//枚举 ActivityType
 	repeated int32 ExpectList = 9;		//枚举 ExpectType
 	optional int64 ActivityTime = 10;
@@ -129,6 +130,8 @@ message SquareActivityInfo{
 	repeated CommentData CommentInfo = 17;//评论信息
 	optional bool IsMoreComment = 18;//是否还有别的评论
 	optional int32 ReportNum = 19;
+	optional bool IsMerchant = 20;
+	optional bool IsVip = 21;//是否vip
 }
 
 message SquareInfo{
@@ -301,6 +304,7 @@ message SearchPlayerInfo{
 	optional int64 BirthDay = 4;
 	optional string Area = 5;
 	optional string Work = 6;
+	optional string HeadIcon = 7;
 }
 
 // 上行(客户端主动发起)
