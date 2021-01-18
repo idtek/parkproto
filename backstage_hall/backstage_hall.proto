@@ -1,9 +1,0 @@
-syntax = "proto3";
-package backstage_hall;
-option go_package = ".;backstage_hall";
-
-
-
-service Service {
-
-}
