@@ -1,0 +1,6 @@
+syntax = "proto2";
+package share_message; //
+
+// 只是为了变其他地方引用一下。如 type _ = share_message.DummyMsg
+message DummyMsg {
+}

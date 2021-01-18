@@ -1,0 +1,74 @@
+syntax = "proto2";
+package client_hall; //
+
+import "base.proto";
+import "parkserver/proto/share_message/allcommon.proto";
+import "parkserver/proto/share_message/table_struct.proto";
+
+message ReadReq{
+	optional int64 LogId = 1;//
+	optional int64 TargetId = 2;//
+}
+
+message WithdrawReq{
+	optional int64 LogId = 1;//
+	optional int64 TargetId = 2;//
+}
+
+
+message MessageRes{
+	repeated MessageInfo Messages = 1;
+}
+
+enum MessageType{
+	System = 1;//系统通知
+	Zan = 2;//点赞通知
+	Comment = 3;//评论通知
+	Report = 4;//报名通知
+	Wallet = 5;//钱包通知
+	Evaluate = 6;//评价通知
+	Square_Dynamic = 7;//电台动态
+	Square_Activity = 8;//电台活动
+}
+
+message MessageInfo{
+	optional int64 LogId = 1;
+	optional int32 Type = 2;//MessageType
+	optional string Name = 3;
+	optional string HeadIcon = 4;
+	optional string Content = 5;
+	optional int64 CreateTime = 6;
+	optional int32 CommentType = 7; //1:动态 2:活动
+}
+
+message WaiterMsgRequest{
+	optional int64 Mid=1;		//消息ID
+	optional int32 Type=2;		//查询类型 0全部，1只查新消息
+}
+
+message WaiterMsgResponse{
+	optional int64 WaiterId=1;	//客服ID 如果WaiterId=0客服正忙
+}
+
+
+// 上行(客户端主动发起)
+service ChatClient2Hall { // 登录注册账号相关
+	rpc RpcChat(share_message.Chat)returns(base.Empty); // 发送聊天
+	rpc RpcReadMessage(client_hall.ReadReq)returns(base.Empty);//阅读某条信息
+	rpc	RpcWithdrawMessage(client_hall.WithdrawReq)returns(base.Empty);//撤回消息
+	rpc RpcRequestMessage(base.Empty)returns(client_hall.MessageRes);//请求系统消息
+	rpc RpcGetWaiterMsg(client_hall.WaiterMsgRequest)returns(share_message.IMmessage);					//查询客服消息
+	rpc RpcSendWaiterMsg(share_message.IMmessage)returns(share_message.IMmessage);						//玩家发送客服消息
+	rpc RpcRequestWaiterService(base.Empty)returns(client_hall.WaiterMsgResponse);						//请求人工客服服务
+	rpc RpcWaiterGrade(share_message.IMmessage)returns(base.Empty);										//玩家给客服评分 只传Id，WaiterId，Grade字段
+}
+
+// 下行(服务端主动发起)
+service ChatHall2Client {
+	rpc RpcChatToClient(share_message.Chat)returns(base.NoReturn); // 接收聊天
+	rpc RpcWithdrawMessageResponse(client_hall.WithdrawReq)returns(base.NoReturn);//撤回消息
+	rpc RpcReadMessageResponse(client_hall.ReadReq)returns(base.NoReturn);//阅读消息
+	rpc RpcNoticeMessage(client_hall.MessageInfo)returns(base.NoReturn);//通知新的系统消息消息
+	rpc RpcNewWaiterMsg(share_message.IMmessage)returns(base.NoReturn); 	//新消息推送
+	rpc RpcEndWaiterMsg(share_message.IMmessage)returns(base.NoReturn);		//结束IM对话消息
+}
