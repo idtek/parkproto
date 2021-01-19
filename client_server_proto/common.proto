@@ -27,7 +27,7 @@ message AllPlayerMsg{
 }
 
 message PlayerMsgList{
-	repeated PlayerMsg PlayerList = 1;//
+	repeated OtherPlayerMsg PlayerList = 1;//
 }
 
 message ChangePlayerInfo{
