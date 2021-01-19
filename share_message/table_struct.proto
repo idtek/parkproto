@@ -22,14 +22,14 @@ message RechargeType{
 	optional int64 TypeId = 1[(gogoproto.jsontag) = "_id,omitempty"];
 	optional int64  Gold = 2;	//金币
 	optional int32 Rmb = 3;	//价格
-	optional int32 RewardGold = 4;//赠送金币
+	optional int64 RewardGold = 4;//赠送金币
 }
 
 message TipOffInfo{
 	optional int64 LogId = 1[(gogoproto.jsontag) = "_id,omitempty"];
 	optional int32 Type = 2;// 枚举TipOffType
 	optional string Reason = 3;
-	optional string Screenshot = 4;//截图
+	repeated string Screenshot = 4;//截图
 	optional int64 PlayerId = 5;//投诉人
 	optional int64 TargetId = 6;//被投诉人
 }
@@ -120,6 +120,53 @@ message MessageRead{
 	optional int64 ChatId = 10;
 }
 
+enum ChannelType{
+	System = 0;
+	Admin = 1;
+}
+
+enum PayType{
+	SystemPay = 0;
+	AliPay = 1;
+	WechatPay = 2;
+	ApplePay = 3;
+}
+
+//订单,表名：order
+message Order {
+	required int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
+	optional int64 PlayerId = 2;											//用户ID
+	optional int64 TargetId = 3;
+	optional string OrderId = 4;											//订单号
+	optional int32 ChannelType = 5;											//渠道类型：0 系统，1人工
+	optional int64 ChangeGold = 6;											//变化金币
+	optional string ExternalNo = 7;										//外部编号，到账编号，第三方编号
+	optional int32 PayType = 8;												//支付方式 PayType
+	optional int64 Amount = 9;												//订单金额
+	optional int64 CreateTime = 10;											//下单时间
+	optional int32 PayStatus = 11;											//支付状态 lg：0待支付，1已支付，2已取消，4已超时
+	optional int32 SourceType = 12; 										//GoldSourceType
+}
+
+enum GoldSourceType{
+	UnLockPhoto = 1; //解锁照片
+	PersonalChat = 2;	//私聊
+	AddWeChat = 3; //加微信
+	VoiceCall = 4; //连麦
+	RechargeGold = 5; //充值金币
+	RechargeVip = 6; //vip
+}
+
+//金币流水记录,所有金币变化都写到金币log中 表名：gold_change_log
+message GoldChangeLog {
+	required int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
+	optional int64 PlayerId = 2;										//用户ID
+	optional int64 ChangeGold = 3;										//变化金币
+	optional int32 SourceType = 4;										//源类型(支付类型) GoldSourceType
+	optional int64 CurGold = 5;										//变化前携带金币
+	optional int64 Gold = 6;											//变化后携带金币
+	optional int64 CreateTime = 7;										//流水时间
+}
 
 
 //用户金币报表 user_gold_report
@@ -238,98 +285,6 @@ message LogLoginInfo{
 	optional string LoginIP = 8;                                //登陆ip
 }
 
-//现金变化源类型表 ，表名:source_type
-message SourceType {
-	required int32 Key = 1 [(gogoproto.jsontag) = "_id,omitempty"];		//key
-	optional string Value = 2;											//title
-	optional int32 Type = 3;											//类型 lg：1入款，2出款
-	optional int32 Channel = 4;											//渠道 待定 未使用
-}
-
-//金币流水记录,所有金币变化都写到金币log中 表名：gold_change_log
-message GoldChangeLog {
-	required int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
-	optional int64 PlayerId = 2;										//用户ID
-	optional string Account=3 [(gogoproto.jsontag) = "-"];				//柠檬号
-	optional int64 ChangeGold = 4;										//变化金币
-	optional int32 SourceType = 5;										//源类型(支付类型)
-	optional string SourceTypeName=6 [(gogoproto.jsontag) = "-"];		//源类型类型名称
-	optional int32 PayType=7;											//1收入，2支出
-	optional int64 CurGold = 10;										//变化前携带金币
-	optional int64 Gold = 11;											//变化后携带金币
-	optional string Note=12;											//备注
-	optional int64 CreateTime = 13;										//流水时间
-	// optional RechargeExtend  Extend=9;									//金币日志充值扩展
-}
-
-message GoldExtendLog{
-	optional int64 RedPacketId = 1;//红包id
-	optional string OrderId = 2;//交易单号
-	optional string MerchantId = 3;//商户id
-	optional string BankName = 4;//银行名字
-	optional string HeadIcon = 5;//对方头像
-	optional int32 PayType = 6;//99 零钱 1微信 2支付宝 3银行卡
-	optional string TransferText = 7;//转账说明或者备注
-	optional int64 ServiceCharge = 8;//服务费
-	optional string Title = 9;//标题
-	optional int64 Gold = 10;//当前现有零钱
-	optional int32 Channel = 11;// 用途 1零钱充值，2发个人红包充值，3发群红包充值，4转账充值，5商场购买充值 6个人扫码付款 7群扫码付款
-}
-
-////金币日志充值扩展
-message RechargeExtend {
-	optional int32 Channeltype = 2;			//渠道类型 lg：1人工，2第三方上分
-	optional int32 PayChannel = 3;			//支付渠道平台 lg：1通联 2快付
-	optional int32 PayType=4;				//支付方式 lg：1通联微信，2快付微信
-	optional string CreateIP = 5;			//操作地址(IP)
-	optional string OrderId = 6;			//订单号
-	optional int64 Amount = 7;				//订单金额
-	optional string Operator=8;				//操作人
-}
-
-//订单,表名：order
-message Order {
-	required string OrderId = 1 [(gogoproto.jsontag) = "_id,omitempty"];	//订单号
-	optional int64 PlayerId = 2;											//用户ID
-	optional string Account=3;												//柠檬号
-	optional string NickName = 4;											//昵称
-	optional string RealName = 5;											//真实姓名
-	optional int32 SourceType = 6;											//源类型(支付类型)
-	optional int32 ChangeType = 7;											//变化类型(交易类型) lg：1 入款，2 出款
-	optional int32 Channeltype = 8;											//渠道类型 lg：0系统，1人工，2第三方上分
-	optional int64 CurGold = 9;												//变化前携带金币
-	optional int64 ChangeGold = 10;											//变化金币
-	optional int64 Gold = 12;												//变化后携带金币
-	optional string ExternalNo = 13;										//外部编号，到账编号，第三方编号
-	optional int32 PayChannel = 14;											//支付渠道平台 lg：1秒到，2通联
-	optional int32 PayType=15;												//支付方式 lg：1微信小程序，2支付宝，3银联
-	optional int64 Amount = 18;												//订单金额
-	optional int64 CreateTime = 19;											//下单时间
-	optional string CreateIP = 20;											//操作地址(IP)
-	optional int32 Status = 21;												//状态 lg：0未处理，1已完成，2已审核，3已取消 4拒绝
-	optional int32 PayStatus = 22;											//支付状态 lg：0待支付，1已支付，2已取消，4已超时
-	optional string Note = 23;												//备注
-	optional int64 Tax = 25;												//税收
-	optional string Operator=27;											//操作人
-	optional int64 OverTime = 26;											//到账时间
-	optional string BankInfo=28;											//收款账号(银行卡号，支付宝号)
-	optional int32 PayWay = 29;                                             //1零钱充值，2发个人红包充值，3发群红包充值，4转账充值，5商场购买充值 6个人扫码付款 7群扫码付款。。。后续扩展
-	optional int64 PayTargetId = 30;                                        //充值对象，可以是玩家id或者群id，或商品id
-	optional string PayOpenId = 31;                                          //支付宝或者微信的openid
-	optional int32 TotalCount =32;                                           //红包个数,充值发红包必填
-    optional string Content = 33;                                           //留言,充值发红包或者留言
-    optional string ExtendValue = 34;                                       //充值时扩展值，自行定义值
-    //提现信息
-	optional string BankCode =35;                                           //银行代码，参照接入文档6.3
-	optional string AccountType =36;                                       //账号类型：00 银行卡，01 存折。
-	optional string AccountNo = 37;                                        //账号：银行卡或存折号码
-	optional string AccountName =38;                                       //账号名:银行卡或存折上的所有人姓名
-	optional string AccountProp =39;                                       //账号属性:0/201 私人，1/204 公司
-	optional string OrderDate = 40;                                         //订单日期
-	optional string IsCheck = 41;                                         //是否需要人工审核
-	optional int64 PlatformTax = 42;                                        //平台手续费：平台扣除我方手续费(入金费用)
-	optional int64 RealTax=43;												//服务手续费=平台手续费+我方服务费
-}
 
 message WithDrawInfo{
 	optional int64 LogId = 1;//
@@ -541,11 +496,7 @@ message GeneralQuota{
 	optional int64 Q5=15;
 	optional int64 Q6=16;
 }
-//支付方式
-message PayType{
-	optional int32 Id=1 [(gogoproto.jsontag) = "_id,omitempty"];	//
-	optional string Name=2;	//1微信，2支付宝，3银联
-}
+
 //支付场景  1.sdk支付、2.小程序、3.扫码支付、4.公众号
 message PayScene{
 	optional int32 Id=1 [(gogoproto.jsontag) = "_id,omitempty"];

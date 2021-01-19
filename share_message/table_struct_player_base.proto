@@ -57,10 +57,9 @@ message Player {
 	repeated int32  Programs = 18;//交友节目
 	repeated int32 Expects = 19;//期望对象
 	optional string NearbyCity = 20; //最近到过的城市
-	optional string InviteCode = 21;//
+	optional string InviteCode = 21;//自己的邀请码
 	optional bool IsMerchant = 22;//是否是商家
-
-
+	optional string BeInviteCode = 23;//别人的邀请码
 }
 
 //资产

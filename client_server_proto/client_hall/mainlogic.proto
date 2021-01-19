@@ -192,7 +192,8 @@ message CommentData{
 }
 
 message DelSquareReq{
-	optional int64  LogId  = 1;
+	optional int64 LogId = 1;
+	optional int32 Type = 2;//SquareType
 }
 
 message GetSquareOneReq{
@@ -217,6 +218,7 @@ message RechargeVipReq{
 message RechargeGoldReq{
 	optional int32 RechargeType = 1;
 	optional int64 Price = 2;
+	optional int32 PayType = 3;//1支付宝 2微信 3苹果支付
 }
 
 message ActivityApplyReq{
@@ -235,7 +237,7 @@ enum TipOffType{
 message TipOffReq{
 	optional int32 Type = 1;// 枚举TipOffType
 	optional string Reason = 2;
-	optional string Screenshot =3;//截图
+	repeated string Screenshot =3;//截图
 	optional int64  TargetId = 4;
 }
 
@@ -282,9 +284,14 @@ message UnReadMessage{
 	optional int32 UnReadNum = 2;
 }
 
+enum CostType{
+	Vip = 1;
+	Gold = 2;
+}
+
 message PhotoLockReq{
 	optional int64 TargetId = 1;
-	optional int32 Type = 2;//1 会员 2付费
+	optional int32 Type = 2;//CostType
 }
 
 message PhotoLockRes{
@@ -309,6 +316,29 @@ message SearchPlayerInfo{
 	optional string Area = 5;
 	optional string Work = 6;
 	optional string HeadIcon = 7;
+}
+
+message PersonalChatReq{
+	optional int64 TargetId = 1;
+	optional int32 Type = 2;//CostType
+}
+
+message CheckWechatReq{
+	optional int64 TargetId = 1;
+	optional int32 Type = 2;//CostType
+}
+
+message CheckWechatRes{
+	optional string Wechat = 1;
+}
+
+message VoiceCallReq{
+	optional int64 TargetId = 1;
+	optional int32 Type = 2;//CostType
+}
+
+message ChangePhotoReq{
+	repeated string Photos = 1;
 }
 
 // 上行(客户端主动发起)
@@ -347,6 +377,10 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcOperateBindWechat(client_hall.WechatInfo)returns(base.Empty);//绑定微信
 	rpc RpcOperateBindPhone(client_hall.WechatInfo)returns(base.Empty);//绑定手机号
 	rpc RpcSearchPlayer(client_hall.SearchPlayerReq)returns(client_hall.SearchPlayerRes);//搜索
+	rpc RpcPersonalChat(client_hall.PersonalChatReq)returns(base.Empty);//私聊某人
+	rpc RpcCheckWechat(client_hall.CheckWechatReq)returns(client_hall.CheckWechatRes);//查看某人微信
+	rpc RpcVoiceCall(client_hall.VoiceCallReq)returns(base.Empty);//连麦某人
+	rpc RpcChangePlayerPhotos(client_hall.ChangePhotoReq)returns(base.Empty);//修改相册
 }
 
 // 下行(服务端主动发起)

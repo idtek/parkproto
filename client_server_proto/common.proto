@@ -31,7 +31,7 @@ message PlayerMsgList{
 }
 
 message ChangePlayerInfo{
-	optional string Name = 1;// 1:昵称 2:头像 3:地区 4:生日 5:职业 6:交友节目 7:期望对象 8:微信号 9:身高 10：体重 11:个人介绍 12:个人设置
+	optional string Name = 1;//
 	optional string HeadIcon = 2;//
 	repeated string Area = 3;//
 	optional int64 Birthday = 4;
