@@ -341,6 +341,24 @@ message ChangePhotoReq{
 	repeated string Photos = 1;
 }
 
+message GetPlayerSquareReq{
+	optional int32 Page = 1;
+	optional int64 PlayerId = 2;
+}
+
+message GetPlayerSquareRes{
+	repeated SquareDynamicInfo Dynamics = 1;
+}
+
+message GetSelfSquareReq{
+	optional int32 Page = 1;
+	optional int32 Type = 2;//SquareType
+}
+
+message GetSelfSquareRes{
+	repeated SquareInfo SquareList = 1;
+}
+
 // 上行(客户端主动发起)
 service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
@@ -381,6 +399,8 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcCheckWechat(client_hall.CheckWechatReq)returns(client_hall.CheckWechatRes);//查看某人微信
 	rpc RpcVoiceCall(client_hall.VoiceCallReq)returns(base.Empty);//连麦某人
 	rpc RpcChangePlayerPhotos(client_hall.ChangePhotoReq)returns(base.Empty);//修改相册
+	rpc RpcGetPlayerSquareInfo(client_hall.GetPlayerSquareReq)returns(client_hall.GetPlayerSquareRes);//获取用户主页发布的动态
+	rpc RpcGetSelfSquareInfo(client_hall.GetSelfSquareReq)returns(client_hall.GetSelfSquareRes);//获取自己发布的动态和活动
 }
 
 // 下行(服务端主动发起)

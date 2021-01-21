@@ -31,7 +31,7 @@ message LoginReq {
 	optional string Password = 2;           // 密码
 	optional int32 PF = 3;                 //设备类型 1 ios，2 android，3 pc
 	optional string LoginIp = 4;    //登陆ip
-	optional int32 Type = 5;//登录类型  1:密码登录  2.微信登录 3.自动登录
+	optional int32 Type = 5;//登录类型  1:密码登录  2.微信登录 3.自动登录 4.游客登录
 	optional string WechatCode = 6;//微信code
 	optional string Mark = 7;//硬件码
 	optional string Token =  8;//自动登录的token

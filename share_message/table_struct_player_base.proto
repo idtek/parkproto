@@ -13,6 +13,7 @@ message Account{
 	optional int64 CreateTime = 5;//注册时间
 	optional string AutoToken = 6;//自动登录的token
 	optional int64 AutoLoginTime = 7;//自动登录设置时间
+	optional bool IsVisit = 8;//是否游客账号
 }
 
 
