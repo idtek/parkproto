@@ -4,18 +4,18 @@ package share_message;
 import "ggotag.proto";
 
 enum Vip_Type{
-	VIP_TYPE_MONTH  = 1; //月卡会员
-	VIP_TYPE_SEASON = 2; //季卡会员
-	VIP_TYPE_YEAR   = 3; //年卡会员
+	VIP_TYPE_HALFMONTH  = 1; //半月会员
+	VIP_TYPE_MONTH  = 2; //月会员
+	VIP_TYPE_SEASON = 3; //季会员
+	VIP_TYPE_HALFYEAR = 4; //半年会员
+	VIP_TYPE_YEAR   = 5; //年会员
 }
 
 message VipType{
 	optional int64 TypeId = 1[(gogoproto.jsontag) = "_id,omitempty"];
 	optional string Name = 2;
-	optional int64  Gold = 3;	//金币
-	optional int32 NowRmb = 4;	//现在的价格
-	optional int32 OriginRmb = 5;	//原来的价格
-	optional double Discount = 6;	//折扣
+	optional int32 OriginRmb = 3;	//原来的价格
+	optional int32 Discount = 4;	//折扣
 }
 
 message RechargeType{
@@ -132,20 +132,26 @@ enum PayType{
 	ApplePay = 3;
 }
 
+enum OrderType{
+	Gold = 1;
+	Vip = 2;
+}
+
 //订单,表名：order
 message Order {
 	required int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
 	optional int64 PlayerId = 2;											//用户ID
 	optional int64 TargetId = 3;
 	optional string OrderId = 4;											//订单号
-	optional int32 ChannelType = 5;											//渠道类型：0 系统，1人工
+	optional int32 ChannelType = 5;											//渠道类型：ChannelType
 	optional int64 ChangeGold = 6;											//变化金币
 	optional string ExternalNo = 7;										//外部编号，到账编号，第三方编号
 	optional int32 PayType = 8;												//支付方式 PayType
 	optional int64 Amount = 9;												//订单金额
 	optional int64 CreateTime = 10;											//下单时间
 	optional int32 PayStatus = 11;											//支付状态 lg：0待支付，1已支付，2已取消，4已超时
-	optional int32 SourceType = 12; 										//GoldSourceType
+	optional int32 OrderType = 12; 										//OrderType
+	optional int32 VipType = 13; //vipType
 }
 
 enum GoldSourceType{
@@ -154,7 +160,7 @@ enum GoldSourceType{
 	AddWeChat = 3; //加微信
 	VoiceCall = 4; //连麦
 	RechargeGold = 5; //充值金币
-	RechargeVip = 6; //vip
+	AgencyGold = 6;//代理金币
 }
 
 //金币流水记录,所有金币变化都写到金币log中 表名：gold_change_log

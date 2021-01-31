@@ -38,6 +38,7 @@ message Chat {
     optional int32 SourceSex = 10;//
     optional int32 EvilType=11; //聊天:0,100:正常 20001：政治 20002：色情 20006：涉毒违法 20007：谩骂 20103 性感 20105：广告引流 24001：暴恐
     optional string DirtyWord = 12; //屏蔽词
+    optional string Mark = 13;
 }
 
 

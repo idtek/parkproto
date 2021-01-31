@@ -210,15 +210,43 @@ message GetPlayerCardRes{
 	repeated SquareDynamicInfo DynamicList = 2;
 }
 
+message OpenRechargeRes{
+	repeated RechargeGold Golds = 1;
+	repeated RechargeVip Vips = 2;
+	optional int32 Gold = 3;
+}
+
+message RechargeGold{
+	optional int32 Type = 1;
+	optional int32 Rmb = 2;
+	optional int32 Gold = 3;
+}
+
+message RechargeVip{
+	optional int32 Type = 1;
+	optional int32 OriginRmb = 2;
+	optional int32 NowRmb = 3;
+	optional int32 Discount = 4;//折扣
+}
+
 message RechargeVipReq{
 	optional int32 VipType = 1;
 	optional int64 Price = 2;
+	optional int32 PayType = 3;//1支付宝 2微信 3苹果支付
+}
+
+message RechargeVipRes{
+	optional string Result = 1;
 }
 
 message RechargeGoldReq{
 	optional int32 RechargeType = 1;
 	optional int64 Price = 2;
 	optional int32 PayType = 3;//1支付宝 2微信 3苹果支付
+}
+
+message RechargeGoldRes{
+	optional string Result = 1;
 }
 
 message ActivityApplyReq{
@@ -362,8 +390,9 @@ message GetSelfSquareRes{
 // 上行(客户端主动发起)
 service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
-	rpc RpcRechargeVip(client_hall.RechargeVipReq)returns(base.Empty);//充值vip
-	rpc RpcRechargeGold(client_hall.RechargeGoldReq)returns(base.Empty);//充值金币
+	rpc RpcRechargeVip(client_hall.RechargeVipReq)returns(client_hall.RechargeVipRes);//充值vip
+	rpc RpcRechargeGold(client_hall.RechargeGoldReq)returns(client_hall.RechargeGoldRes);//充值金币
+	rpc RpcOpenRechargeInfo(base.Empty)returns(client_hall.OpenRechargeRes);//打开充值页面
 	rpc RpcAddSquareDynamic(client_hall.SquareDynamicInfo)returns(client_hall.SquareDynamicInfo);//增加社区动态
 	rpc RpcAddSquareActivity(client_hall.SquareActivityInfo)returns(client_hall.SquareActivityInfo);//增加社区活动
 	rpc RpcDelSquareInfo(client_hall.DelSquareReq)returns(base.Empty);//删除动态或者活动
