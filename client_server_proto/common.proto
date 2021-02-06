@@ -100,6 +100,11 @@ message BroadIdReq {
 	optional int32 BroadId = 4;         //广播id
 }
 
+enum Code_Type{
+	Register = 1;
+	Password = 2;
+}
+
 //验证码请求
 message GetCodeReq {
 	required string Phone = 1;   //

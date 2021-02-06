@@ -418,7 +418,6 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcLikePlayer(client_hall.LikePlayerReq)returns(base.Empty);//喜爱某个人
 	rpc RpcNotePlayer(client_hall.NotePlayerReq)returns(base.Empty);//备注某个人
 	rpc RpcModifyPlayerSetting(share_message.PlayerSetting)returns(base.Empty);//修改个人设置
-	rpc RpcSyncTime(base.Empty)returns(client_server.NTP);//同步服务器时间
  	rpc RpcCutBackstage(base.Empty)returns(base.Empty);	//软件切出后台
  	rpc RpcReturnApp(base.Empty)returns(base.Empty);	//软件切回app
 	rpc RpcOperateBindWechat(client_hall.WechatInfo)returns(base.Empty);//绑定微信
@@ -438,6 +437,6 @@ service AccountHall2Client {
 	rpc RpcFreezePlayerLogOut(base.Empty)returns(base.NoReturn);//冻结用户返回登录界面
 	rpc RpcSysParameterChange(share_message.SysParameter)returns(base.NoReturn);	//系统参数改变
 	rpc RpcNewMessage(base.Empty)returns(base.NoReturn);	//有新消息显示红点
-
+	rpc RpcUpdatePlayerVip(share_message.PlayerVip)returns(base.NoReturn); //通知用户会员变化
 	rpc RpcUnReadChatMessage(client_hall.UnReadMessage)returns(base.NoReturn);//登录发送未读聊天信息
 }
