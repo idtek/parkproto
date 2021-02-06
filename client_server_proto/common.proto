@@ -71,6 +71,7 @@ message PlayerMsg {
 	repeated OtherPlayerMsg  HeartPlayerList = 18;//心动
 	optional share_message.PlayerSetting PlayerSetting = 19;//玩家个人设置
 	optional share_message.PlayerVip VipInfo = 20;//vip信息
+	optional string InviteCode = 21;//邀请码
 }
 
 message OtherPlayerMsg{
