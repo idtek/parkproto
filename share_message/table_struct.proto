@@ -174,6 +174,11 @@ message GoldChangeLog {
 	optional int64 CreateTime = 7;										//流水时间
 }
 
+message AgencyGoldLog{
+	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];										//用户ID
+	optional int64 Gold = 2;											//
+	optional int32 Num = 3;
+}
 
 //用户金币报表 user_gold_report
 message UserGoldReport {

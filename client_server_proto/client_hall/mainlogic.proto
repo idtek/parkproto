@@ -210,7 +210,7 @@ message GetPlayerCardRes{
 	repeated SquareDynamicInfo DynamicList = 2;
 }
 
-message OpenRechargeRes{
+message  OpenRechargeRes{
 	repeated RechargeGold Golds = 1;
 	repeated RechargeVip Vips = 2;
 	optional int32 Gold = 3;
@@ -387,6 +387,12 @@ message GetSelfSquareRes{
 	repeated SquareInfo SquareList = 1;
 }
 
+message OpenInviteFriendRes{
+	optional string InviteCode = 1;
+	optional int32 Reward = 2; //奖励金币
+	optional int32 Count = 3; //人数
+}
+
 // 上行(客户端主动发起)
 service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
@@ -429,6 +435,7 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcChangePlayerPhotos(client_hall.ChangePhotoReq)returns(base.Empty);//修改相册
 	rpc RpcGetPlayerSquareInfo(client_hall.GetPlayerSquareReq)returns(client_hall.GetPlayerSquareRes);//获取用户主页发布的动态
 	rpc RpcGetSelfSquareInfo(client_hall.GetSelfSquareReq)returns(client_hall.GetSelfSquareRes);//获取自己发布的动态和活动
+	rpc RpcOpenInviteFriend(base.Empty)returns(client_hall.OpenInviteFriendRes);//打开邀请界面
 }
 
 // 下行(服务端主动发起)
