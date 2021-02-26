@@ -14,6 +14,7 @@ enum LoginMark{
 	LOGIN_ERROR_STOPSERVER = 7;//服务器维护
 	LOGIN_ERROR_WECHATTOKEN = 8;//微信token码错误
 	LOGIN_ERROR_AUTOTOKEN = 9;//自动登录验证码过期
+	LOGIN_ERROR_LOGINTYPE = 10;//登录类型错误
 }
 
 enum RegisterMark{

@@ -27,6 +27,7 @@ message GetNearByReq{
 	optional string Area = 3;//
 	optional int32 Type = 4;// 1:附近  2:按地区
 	optional int32 Page = 5;
+	optional int32 Sex = 6;//1看男生  2女生 3全部
 }
 
 message GetNearByRes{
