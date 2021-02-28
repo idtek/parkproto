@@ -390,8 +390,19 @@ message GetSelfSquareRes{
 
 message OpenInviteFriendRes{
 	optional string InviteCode = 1;
-	optional int32 Reward = 2; //奖励金币
+	optional int32 Reward = 2; //奖励金币c
 	optional int32 Count = 3; //人数
+}
+
+message RpcGetReportActivityReq{
+	optional int32 Page = 1;
+	optional int64 ActivityId = 2;
+}
+
+message RpcGetReportActivityRes{
+	repeated client_server.OtherPlayerMsg Players = 1;
+	optional int64 ActivityId = 2;
+	optional bool More = 3;
 }
 
 // 上行(客户端主动发起)
@@ -437,6 +448,7 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcGetPlayerSquareInfo(client_hall.GetPlayerSquareReq)returns(client_hall.GetPlayerSquareRes);//获取用户主页发布的动态
 	rpc RpcGetSelfSquareInfo(client_hall.GetSelfSquareReq)returns(client_hall.GetSelfSquareRes);//获取自己发布的动态和活动
 	rpc RpcOpenInviteFriend(base.Empty)returns(client_hall.OpenInviteFriendRes);//打开邀请界面
+	rpc RpcGetReportActivityPlayerInfo(client_hall.RpcGetReportActivityReq)returns(client_hall.RpcGetReportActivityRes);//获取某个节目报名信息
 }
 
 // 下行(服务端主动发起)
