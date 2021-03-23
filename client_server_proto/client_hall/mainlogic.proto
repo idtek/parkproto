@@ -449,6 +449,8 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcGetSelfSquareInfo(client_hall.GetSelfSquareReq)returns(client_hall.GetSelfSquareRes);//获取自己发布的动态和活动
 	rpc RpcOpenInviteFriend(base.Empty)returns(client_hall.OpenInviteFriendRes);//打开邀请界面
 	rpc RpcGetReportActivityPlayerInfo(client_hall.RpcGetReportActivityReq)returns(client_hall.RpcGetReportActivityRes);//获取某个节目报名信息
+	rpc RpcEditSquareDynamic(client_hall.SquareDynamicInfo)returns(client_hall.SquareDynamicInfo);	//编辑动态
+	rpc RpcEditSquareActivity(client_hall.SquareActivityInfo)returns(client_hall.SquareActivityInfo);	//编辑活动
 }
 
 // 下行(服务端主动发起)
