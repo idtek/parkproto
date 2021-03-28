@@ -9,6 +9,8 @@ message BroadCastData{
     optional string NickName = 5;          //昵称
     optional int32 ActivityType = 6;  //活动类型
     optional int32 VipType = 7;//vip类型  1:月会员 2:季会员 3:年会员
+    optional int64 Id = 8;//动态id或者活动id
+    optional int64 Time = 9;//什么时候发送的广播
 }
 
 message BroadCastMsg{

@@ -405,6 +405,7 @@ message RpcGetReportActivityRes{
 	optional bool More = 3;
 }
 
+
 // 上行(客户端主动发起)
 service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
@@ -451,6 +452,7 @@ service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcGetReportActivityPlayerInfo(client_hall.RpcGetReportActivityReq)returns(client_hall.RpcGetReportActivityRes);//获取某个节目报名信息
 	rpc RpcEditSquareDynamic(client_hall.SquareDynamicInfo)returns(client_hall.SquareDynamicInfo);	//编辑动态
 	rpc RpcEditSquareActivity(client_hall.SquareActivityInfo)returns(client_hall.SquareActivityInfo);	//编辑活动
+	rpc RpcGetBroadCastMsg(base.Empty)returns(share_message.BroadCastMsg);//获取最近的广播信息
 }
 
 // 下行(服务端主动发起)
