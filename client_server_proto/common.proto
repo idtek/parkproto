@@ -68,9 +68,8 @@ message PlayerMsg {
 	optional int32  High = 15;
 	optional int32 Weigh = 16;
 	optional int32 AuthType = 17;//LabelAuthType
-	repeated OtherPlayerMsg  HeartPlayerList = 18;//心动
-	optional share_message.PlayerSetting PlayerSetting = 19;//玩家个人设置
-	optional share_message.PlayerVip VipInfo = 20;//vip信息
+	optional share_message.PlayerSetting PlayerSetting = 18;//玩家个人设置
+	optional share_message.PlayerVip VipInfo = 19;//vip信息
 }
 
 message OtherPlayerMsg{
