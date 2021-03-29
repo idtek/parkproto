@@ -413,6 +413,7 @@ message GetLikePlayerListRes{
 	optional int32 Page = 1;
 	optional bool More = 2;
 	repeated client_server.OtherPlayerMsg Players = 3;
+	optional int64 Total = 4;
 }
 
 // 上行(客户端主动发起)
