@@ -237,7 +237,9 @@ message RechargeVipReq{
 }
 
 message RechargeVipRes{
-	optional string Result = 1;
+	optional string AliResult = 1;//支付宝返回
+	optional int32 PayType = 2; //1支付宝 2微信 3苹果支付
+	optional bytes WechatResult = 3;//微信返回
 }
 
 message RechargeGoldReq{
@@ -247,7 +249,9 @@ message RechargeGoldReq{
 }
 
 message RechargeGoldRes{
-	optional string Result = 1;
+	optional string AliResult = 1;	//支付宝返回
+	optional int32 PayType = 2; //1支付宝 2微信 3苹果支付
+	optional bytes WechatResult = 3;//微信返回
 }
 
 message ActivityApplyReq{
@@ -416,11 +420,21 @@ message GetLikePlayerListRes{
 	optional int64 Total = 4;
 }
 
+message RpcGetOrderPayStatusReq{
+	optional string OrderId = 1;
+}
+
+message RpcGetOrderPayStatusRes{
+	optional string OrderId = 1;
+	optional int32 PayStatus = 2; //0 :未支付 1：已支付  2：失败 3：过期
+}
+
 // 上行(客户端主动发起)
 service AccountClient2Hall { // 登录注册账号相关
 	rpc RpcModifyPlayerMsg(client_server.ChangePlayerInfo)returns(base.Empty);       //修改个人信息
 	rpc RpcRechargeVip(client_hall.RechargeVipReq)returns(client_hall.RechargeVipRes);//充值vip
 	rpc RpcRechargeGold(client_hall.RechargeGoldReq)returns(client_hall.RechargeGoldRes);//充值金币
+	rpc RpcGetOrderPayStatus(client_hall.RpcGetOrderPayStatusReq)returns(client_hall.RpcGetOrderPayStatusRes);//获取订单支付状态
 	rpc RpcOpenRechargeInfo(base.Empty)returns(client_hall.OpenRechargeRes);//打开充值页面
 	rpc RpcAddSquareDynamic(client_hall.SquareDynamicInfo)returns(client_hall.SquareDynamicInfo);//增加社区动态
 	rpc RpcAddSquareActivity(client_hall.SquareActivityInfo)returns(client_hall.SquareActivityInfo);//增加社区活动
