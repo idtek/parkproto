@@ -70,6 +70,7 @@ message PlayerMsg {
 	optional int32 AuthType = 17;//LabelAuthType
 	optional share_message.PlayerSetting PlayerSetting = 18;//玩家个人设置
 	optional share_message.PlayerVip VipInfo = 19;//vip信息
+	optional bool IsMerchant = 20;//是否是商户
 }
 
 message OtherPlayerMsg{
