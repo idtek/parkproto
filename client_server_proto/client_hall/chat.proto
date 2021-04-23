@@ -2,8 +2,8 @@ syntax = "proto2";
 package client_hall; //
 
 import "base.proto";
-import "parkserver/proto/share_message/allcommon.proto";
-import "parkserver/proto/share_message/table_struct.proto";
+import "park/proto/share_message/allcommon.proto";
+import "park/proto/share_message/table_struct.proto";
 
 message ReadReq{
 	optional int64 LogId = 1;//

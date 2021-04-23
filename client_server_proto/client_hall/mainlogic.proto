@@ -2,10 +2,10 @@ syntax = "proto2";
 package client_hall; //
 
 import "base.proto";
-import "parkserver/proto/client_server_proto/common.proto";
-import "parkserver/proto/share_message/allcommon.proto";
-import "parkserver/proto/share_message/table_struct.proto";
-import "parkserver/proto/share_message/table_struct_player_base.proto";
+import "park/proto/client_server_proto/common.proto";
+import "park/proto/share_message/allcommon.proto";
+import "park/proto/share_message/table_struct.proto";
+import "park/proto/share_message/table_struct_player_base.proto";
 
 
 message UpdateGold{
@@ -227,7 +227,8 @@ message RechargeVip{
 	optional int32 Type = 1;
 	optional int32 OriginRmb = 2;
 	optional int32 NowRmb = 3;
-	optional int32 Discount = 4;//折扣
+	optional double Discount = 4;//折扣
+	optional int32 Fish = 5;
 }
 
 message RechargeVipReq{

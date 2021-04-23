@@ -1,9 +1,9 @@
 syntax = "proto2";
 package client_server; //
 import "base.proto";
-import "parkserver/proto/share_message/allcommon.proto";
-import "parkserver/proto/share_message/table_struct.proto";
-import "parkserver/proto/share_message/table_struct_player_base.proto";
+import "park/proto/share_message/allcommon.proto";
+import "park/proto/share_message/table_struct.proto";
+import "park/proto/share_message/table_struct_player_base.proto";
 
 
 

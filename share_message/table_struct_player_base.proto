@@ -67,6 +67,7 @@ message Player {
 message PlayerAsset{
 	optional int64 PlayerId = 1[(gogoproto.jsontag) = "_id,omitempty"];
 	optional int64 Gold = 2;
+	optional int64 Fish = 3;
 }
 
 //vip信息

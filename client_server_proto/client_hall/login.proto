@@ -2,7 +2,7 @@ syntax = "proto2";
 package client_hall;
 
 import "base.proto";
-import "parkserver/proto/client_server_proto/common.proto";
+import "park/proto/client_server_proto/common.proto";
 
 enum LoginMark{
 	LOGIN_SUCCESS = 1;//登录成功

@@ -15,7 +15,9 @@ message VipType{
 	optional int64 TypeId = 1[(gogoproto.jsontag) = "_id,omitempty"];
 	optional string Name = 2;
 	optional int32 OriginRmb = 3;	//原来的价格
-	optional int32 Discount = 4;	//折扣
+	optional double Discount = 4;	//折扣
+	optional int32 Fish = 5;//鱼卷
+	optional int32 NowRmb = 6;
 }
 
 message RechargeType{
@@ -171,6 +173,21 @@ message GoldChangeLog {
 	optional int32 SourceType = 4;										//源类型(支付类型) GoldSourceType
 	optional int64 CurGold = 5;										//变化前携带金币
 	optional int64 Gold = 6;											//变化后携带金币
+	optional int64 CreateTime = 7;										//流水时间
+}
+
+enum	FishSourceType{
+	Recharge_Vip = 1;
+	Lottery = 2;
+}
+
+message FishChangeLog {
+	required int64 LogId = 1 [(gogoproto.jsontag) = "_id,omitempty"];
+	optional int64 PlayerId = 2;										//用户ID
+	optional int64 ChangeFish = 3;										//变化金币
+	optional int32 SourceType = 4;										//源类型(支付类型) FishSourceType
+	optional int64 CurFish = 5;										//变化前携带金币
+	optional int64 Fish = 6;											//变化后携带金币
 	optional int64 CreateTime = 7;										//流水时间
 }
 
