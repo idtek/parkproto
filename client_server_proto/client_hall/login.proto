@@ -37,12 +37,14 @@ message LoginReq {
 	optional string Mark = 7;//硬件码
 	optional string Token =  8;//自动登录的token
 	optional int64 PlayerId = 9;
+	optional string JgId = 10; //极光id
 }
 
 message LoginRes{
 	optional client_server.PlayerMsg Myself = 1;//自己的信息
 	optional int32 LoginResult = 2;
 	optional string InviteCode = 3;
+	optional string JGId = 4;//极光id
 //	repeated PlayerMsg Friends = 2;//好友的信息
 //	repeated AllPersonalChatLog ChatMsg = 3;//私聊信息
 //	optional share_message.AllAddPlayerMsg  AllAddPlayerMsg =4;//所有好友申请信息
@@ -58,6 +60,7 @@ message RegisterReq {
 message RegisterRes {
 	optional client_server.PlayerMsg Myself = 1;//自己的信息
 	optional int32 RegisterResult = 2;
+	optional string JGId = 3;//极光id
 }
 
 message ForgetPasswordReq{

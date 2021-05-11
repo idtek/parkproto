@@ -11,9 +11,8 @@ message Account{
 	optional string Password = 3;//手机帐号密码
 	optional string OpenId = 4;//微信openId
 	optional int64 CreateTime = 5;//注册时间
-	optional string AutoToken = 6;//自动登录的token
-	optional int64 AutoLoginTime = 7;//自动登录设置时间
-	optional bool IsVisit = 8;//是否游客账号
+	optional bool IsVisit = 6;//是否游客账号
+	optional string JGId = 7;//极光id
 }
 
 
@@ -61,6 +60,7 @@ message Player {
 	optional string InviteCode = 21;//自己的邀请码
 	optional bool IsMerchant = 22;//是否是商家
 	optional string BeInviteCode = 23;//别人的邀请码
+	optional string Ancestor = 24;	//第一代人的邀请码
 }
 
 //资产

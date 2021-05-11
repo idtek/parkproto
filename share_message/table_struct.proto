@@ -163,6 +163,7 @@ enum GoldSourceType{
 	VoiceCall = 4; //连麦
 	RechargeGold = 5; //充值金币
 	AgencyGold = 6;//代理金币
+	BackstageGold = 7;//后台操作
 }
 
 //金币流水记录,所有金币变化都写到金币log中 表名：gold_change_log
